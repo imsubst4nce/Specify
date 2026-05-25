@@ -1,0 +1,5 @@
+{
+  "name": "Specify",
+  "description": "A web application for software requirements specification and analysis using Use Cases, CRC Cards, and UML script generation.",
+  "requestFramePermissions": [],
+}

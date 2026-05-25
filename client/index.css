@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-ivy-50: #faf6fe;
+  --color-ivy-100: #f2e6fc;
+  --color-ivy-200: #e4d0fa;
+  --color-ivy-250: #d4b4fb;
+  --color-ivy-300: #be90fa;
+  --color-ivy-600: #7c3aed;
+  --color-ivy-700: #6d28d9;
+  --color-ivy-800: #5b21b6;
+  --color-ivy-850: #4c1d95;
+  --color-ivy-900: #3b117b;
+  
+  --color-wood-50: #f9f8fc;
+  --color-wood-100: #f1ecf6;
+  --color-wood-200: #e3daf0;
+  --color-wood-300: #c6b8e2;
+  --color-wood-400: #ad9ccf;
+  --color-wood-700: #403061;
+  --color-wood-750: #30214f;
+  --color-wood-800: #231640;
+  --color-wood-850: #1a0f32;
+  --color-wood-950: #0a0319;
+}
+
+/* Custom advanced smooth multi-layered shadows overrides */
+.shadow-3xs {
+  box-shadow: 0 1px 2px rgba(18, 8, 36, 0.02);
+}
+
+.shadow-2xs {
+  box-shadow: 0 2px 4px rgba(18, 8, 36, 0.02), 0 4px 12px rgba(18, 8, 36, 0.03);
+}
+
+.shadow-xs, .shadow-sm {
+  box-shadow: 0 4px 6px rgba(18, 8, 36, 0.03), 0 8px 18px rgba(18, 8, 36, 0.05);
+}
+
+.shadow-md {
+  box-shadow: 0 8px 16px rgba(18, 8, 36, 0.04), 0 16px 32px rgba(18, 8, 36, 0.06);
+}
+
+.shadow-lg, .shadow-xl {
+  box-shadow: 0 12px 24px rgba(18, 8, 36, 0.06), 0 24px 48px rgba(18, 8, 36, 0.1);
+}
+
+/* Custom Global Dark Mode overrides inside src/index.css */
+.dark {
+  background-color: #0c051d !important;
+  color: #e2e8f0 !important;
+}
+
+.dark body {
+  background-color: #0c051d !important;
+}
+
+/* Background Workspace Container */
+.dark #app-workspace-root {
+  background-color: #0c051d !important;
+}
+
+/* Card components - swap bg-white to wood-900 and border to wood-800 */
+.dark .bg-white,
+.dark .bg-stone-50\/30 {
+  background-color: #140b2a !important;
+  border-color: #231640 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Muted areas like inside blocks */
+.dark .bg-stone-50,
+.dark .bg-slate-50,
+.dark .bg-stone-100,
+.dark .bg-slate-100,
+.dark .bg-slate-50\/50,
+.dark .bg-stone-50\/50 {
+  background-color: #1c1136 !important;
+  border-color: #30214f !important;
+  color: #cbd5e1 !important;
+}
+
+/* Border styles */
+.dark .border-stone-150,
+.dark .border-stone-200,
+.dark .border-slate-100,
+.dark .border-slate-150,
+.dark .border-slate-200,
+.dark .border-stone-150\/80 {
+  border-color: #231640 !important;
+}
+
+/* Text color fixes */
+.dark .text-stone-800,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-stone-700,
+.dark .text-stone-900,
+.dark .text-slate-900,
+.dark .text-stone-100,
+.dark .text-stone-600,
+.dark .text-slate-600 {
+  color: #f1f5f9 !important;
+}
+
+.dark .text-stone-500,
+.dark .text-slate-500,
+.dark .text-stone-400,
+.dark .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+/* Inputs, Textareas, Select fields */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #1c1136 !important;
+  border-color: #30214f !important;
+  color: #f1f5f9 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Hover behaviors */
+.dark .hover\:bg-stone-50:hover,
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-stone-100:hover {
+  background-color: #231640 !important;
+}
+
+/* Highlight badge inside help guides or checklist columns */
+.dark .bg-ivy-50,
+.dark .bg-ivy-100 {
+  background-color: #2d1d4f !important;
+  border-color: #4c1d95 !important;
+  color: #d4b4fb !important;
+}
+
+.dark .text-ivy-700,
+.dark .text-ivy-600 {
+  color: #c6b8e2 !important;
+}
+
+/* Dark mode shadows - deep slate transparent glowing elements */
+.dark .shadow-3xs {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .shadow-2xs {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark .shadow-xs, .dark .shadow-sm {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .shadow-md {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .shadow-lg, .dark .shadow-xl {
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6) !important;
+}
