@@ -57,6 +57,14 @@
 
     <build>
         <sourceDirectory>server</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>server</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
