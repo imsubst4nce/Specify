@@ -166,7 +166,7 @@ export default function AuthPage({
     }
     
     // Check if the file size is reasonable (up to 2MB)
-    if (file.size > 2 * 1024 * 1024) {
+    if (file.size > 1 * 1024 * 1024) {
       setError('Image file is too large. Please upload an image under 2MB.');
       return;
     }
@@ -392,7 +392,10 @@ export default function AuthPage({
                       {dragActive ? 'Drop image here' : 'Drop image or click here to upload'}
                     </span>
                     <span className="text-[10px] text-stone-400 mt-0.5 leading-none">
-                      PNG, JPG or WEBP (Max 2MB)
+                      PNG, JPG or WEBP
+                    </span>
+                    <span className="text-[10px] text-stone-400 mt-0.5 leading-none">
+                      ( max 2 MB )
                     </span>
                   </div>
                 </div>

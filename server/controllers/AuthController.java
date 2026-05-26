@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Spring REST Controller managing user registration, secure session logins, and profile revisions.
@@ -108,6 +110,34 @@ public class AuthController {
         Optional<User> user = userRepository.findById(userId);
         return user.map(ResponseEntity::ok)
                    .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    /**
+     * Retrieves a list of all registered users as potential teammates (excluding current user)
+     */
+    @GetMapping("/users")
+    public ResponseEntity<List<Map<String, String>>> listAllUsers(@RequestHeader("Authorization") String tokenHeader) {
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String currentUserId = tokenHeader.substring(7);
+        if (!userRepository.existsById(currentUserId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<User> allUsers = userRepository.findAll();
+        List<Map<String, String>> result = new ArrayList<>();
+        for (User u : allUsers) {
+            if (!u.getId().equals(currentUserId)) {
+                Map<String, String> m = new HashMap<>();
+                m.put("id", u.getId());
+                m.put("name", u.getName());
+                m.put("email", u.getEmail());
+                m.put("avatarUrl", u.getAvatarUrl());
+                result.add(m);
+            }
+        }
+        return ResponseEntity.ok(result);
     }
 
     /**

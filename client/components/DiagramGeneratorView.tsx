@@ -130,18 +130,18 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
             <span className="text-[10px] font-bold text-ivy-700 uppercase tracking-wider block">
               Specify Drawing Engine Support
             </span>
-            <h3 className="text-sm font-serif font-bold text-stone-900 mt-0.5">UML Diagrams Script Workspace</h3>
+            <h3 className="text-sm font-serif font-bold text-ivy-950 mt-0.5">UML Diagrams Script Workspace</h3>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
             {/* Diagram select tab */}
-            <div className="bg-stone-100 p-0.5 rounded-lg flex text-xs">
+            <div className="bg-ivy-50 p-0.5 rounded-lg flex text-xs border border-ivy-100">
               <button 
                 onClick={() => setDiagramType('usecase')}
                 className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
                   diagramType === 'usecase'
                     ? 'bg-ivy-700 text-white shadow-xs'
-                    : 'text-stone-600 hover:text-ivy-700'
+                    : 'text-ivy-800 hover:text-ivy-700'
                 }`}
               >
                 Use Case Diagram
@@ -151,7 +151,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                 className={`px-3 py-1.5 rounded-md font-semibold transition-all cursor-pointer ${
                   diagramType === 'class'
                     ? 'bg-ivy-700 text-white shadow-xs'
-                    : 'text-stone-600 hover:text-ivy-700'
+                    : 'text-ivy-800 hover:text-ivy-700'
                 }`}
               >
                 Class (CRC) Diagram
@@ -159,13 +159,13 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
             </div>
 
             {/* Strategy Selection tool tool */}
-            <div className="flex items-center gap-1.5 bg-stone-100 p-0.5 rounded-lg text-xs">
+            <div className="flex items-center gap-1.5 bg-ivy-50 p-0.5 rounded-lg text-xs border border-ivy-100">
               <button 
                 onClick={() => setSelectedTool('plantuml')}
                 className={`px-3 py-1.5 rounded-md font-semibold font-mono transition-all cursor-pointer ${
                   selectedTool === 'plantuml'
                     ? 'bg-ivy-700 text-white shadow-xs'
-                    : 'text-stone-600 hover:text-ivy-700'
+                    : 'text-ivy-800 hover:text-ivy-700'
                 }`}
               >
                 PlantUML
@@ -175,7 +175,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                 className={`px-3 py-1.5 rounded-md font-semibold font-mono transition-all cursor-pointer ${
                   selectedTool === 'nomnoml'
                     ? 'bg-ivy-700 text-white shadow-xs'
-                    : 'text-stone-600 hover:text-ivy-700'
+                    : 'text-ivy-800 hover:text-ivy-700'
                 }`}
               >
                 Nomnoml
@@ -185,7 +185,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
             <button 
               onClick={generateDiagramScript} 
               disabled={loading} 
-              className="p-2 border border-stone-200 hover:border-stone-300 text-stone-500 hover:text-stone-700 bg-white hover:bg-stone-50 rounded-lg cursor-pointer transition-colors" 
+              className="p-2 border border-ivy-200 hover:border-ivy-300 text-ivy-700 hover:text-ivy-900 bg-white hover:bg-ivy-50/50 rounded-lg cursor-pointer transition-colors" 
               title="Refresh scripts"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -223,48 +223,68 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                   <p className="text-[10px] text-slate-400">Go to specifications section and add use cases.</p>
                 </div>
               ) : (
-                <div className="space-y-6">
-                  {/* Visual Actors & Use Cases Grid */}
-                  <div className="grid grid-cols-3 gap-6 items-center">
-                    
-                    {/* Unique Actors Column */}
-                    <div className="space-y-4 flex flex-col items-center">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Actors</span>
-                      {getUniqueActors().length === 0 ? (
-                        <p className="text-[10px] text-slate-400 italic">No actors</p>
-                      ) : (
-                        getUniqueActors().map((actor, idx) => (
-                          <div key={idx} className="bg-white p-3 rounded-lg border border-slate-200/60 shadow-3xs flex flex-col items-center justify-center w-28 text-center text-xs">
-                            {/* Standard stick-man head & torso via SVG */}
-                            <svg className="h-7 w-7 text-indigo-600 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                              <circle cx={12} cy={7} r={4} />
-                              <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
-                            </svg>
-                            <span className="font-bold text-slate-800">{actor}</span>
+                <div className="space-y-4">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block text-center mb-1">Row-by-Row Actor Interaction Boundaries</span>
+                  <div className="w-full max-h-[360px] overflow-y-auto pr-1 space-y-3" id="usecase-rows-container">
+                    {useCases.map((uc) => {
+                      const validActors = Array.isArray(uc.actors) ? uc.actors.filter(actor => actor && actor.trim()) : [];
+                      return (
+                        <div 
+                          key={uc.id} 
+                          className="bg-white rounded-lg border border-ivy-200 p-3.5 shadow-3xs flex items-center justify-between gap-4 transition-all hover:border-ivy-350 hover:shadow-xs"
+                        >
+                          {/* Actor(s) Column - Left side */}
+                          <div className="w-1/3 flex items-center gap-2">
+                            {validActors.length === 0 ? (
+                              <div className="flex items-center gap-2 bg-ivy-50 border border-ivy-200 rounded px-2.5 py-1.5 min-w-[100px] border-dashed">
+                                <svg className="h-4 w-4 text-ivy-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                  <circle cx={12} cy={12} r={3} />
+                                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                                </svg>
+                                <span className="font-semibold text-[10px] text-ivy-600 italic">System Event</span>
+                              </div>
+                            ) : (
+                              <div className="flex flex-wrap gap-1.5 items-center">
+                                {validActors.map((actor, idx) => (
+                                  <div 
+                                    key={idx} 
+                                    className="flex items-center gap-1.5 bg-ivy-50 border border-ivy-100 rounded px-2 py-1 min-w-[90px] max-w-[130px]"
+                                  >
+                                    {/* Minimal stick-man head & torso via SVG */}
+                                    <svg className="h-4 w-4 text-ivy-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+                                      <circle cx={12} cy={7} r={4} />
+                                      <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
+                                    </svg>
+                                    <span className="font-bold text-[10px] text-ivy-400 truncate" title={actor}>
+                                      {actor}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                        ))
-                      )}
-                    </div>
 
-                    {/* Interaction Arrow illustration Column */}
-                    <div className="flex flex-col justify-around h-full py-8 text-center">
-                      <div className="text-[10px] text-stone-400 italic font-medium">Invokes system trigger</div>
-                      <div className="text-ivy-600 text-sm font-bold flex flex-col items-center gap-1 my-auto">
-                        <ArrowRight className="h-5 w-5" />
-                        <span className="text-[9px] font-mono select-none">{"-->"}</span>
-                      </div>
-                    </div>
+                          {/* Connection Arrow - Middle column */}
+                          <div className="w-1/6 flex justify-center text-center">
+                            <div className="flex flex-col items-center select-none">
+                              <ArrowRight className="h-4 w-4 text-ivy-700" />
+                              <span className="text-[8px] font-mono font-bold text-ivy-700 mt-0.5 uppercase tracking-widest bg-ivy-50 px-1.5 py-0.5 rounded">
+                                Invokes
+                              </span>
+                            </div>
+                          </div>
 
-                    {/* Use cases Column */}
-                    <div className="space-y-4">
-                      <span className="text-[9px] font-bold text-stone-400 uppercase tracking-widest block text-center mb-1">Use Case Boundaries</span>
-                      {useCases.map((uc) => (
-                        <div key={uc.id} className="bg-ivy-50 border border-ivy-250 text-ivy-900 p-2.5 rounded-full text-center text-[11px] font-bold shadow-3xs transition-all hover:scale-[1.02]">
-                          {uc.title}
+                          {/* Use Case Oval Boundary - Right side */}
+                          <div className="w-1/2 flex justify-end">
+                            <div className="w-full max-w-[210px] bg-ivy-50 hover:bg-ivy-100/50 border-2 border-ivy-150 rounded-full px-4 py-2 text-center transition-all hover:scale-[1.01] hover:border-ivy-300 cursor-default flex items-center justify-center min-h-[42px] shadow-3xs">
+                              <span className="font-serif font-bold text-[10.5px] text-ivy-950 leading-tight">
+                                {uc.title}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      ))}
-                    </div>
-
+                      );
+                    })}
                   </div>
                 </div>
               )
@@ -282,15 +302,15 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                     {crcCards.map(card => {
                       const safetyVal = Array.isArray(card.collaborators) ? card.collaborators.filter(Boolean) : [];
                       return (
-                        <div key={card.id} className="bg-white rounded-lg border border-stone-200 shadow-3xs p-3 space-y-2">
+                        <div key={card.id} className="bg-white rounded-lg border border-ivy-200 shadow-3xs p-3 space-y-2">
                           <div className="border-b border-ivy-100 pb-1 flex justify-between items-center bg-ivy-50 p-1.5 rounded">
-                            <span className="font-bold font-mono text-xs text-stone-850">{card.className}</span>
+                            <span className="font-bold font-mono text-xs text-ivy-400">{card.className}</span>
                             <span className="text-[8px] uppercase font-bold text-ivy-700 tracking-wide">Class</span>
                           </div>
                           
-                          <div className="text-[9px] text-stone-500">
+                          <div className="text-[9px] text-ivy-700">
                             <strong>Responsibilities:</strong>
-                            <div className="mt-1 space-y-0.5 pl-1.5 border-l border-stone-200">
+                            <div className="mt-1 space-y-0.5 pl-1.5 border-l border-ivy-150">
                               {(card.responsibilities || []).slice(0, 3).map((r, i) => (
                                 <div key={i} className="truncate">• {r}</div>
                               ))}
@@ -314,7 +334,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
             )}
 
             {/* Render advice footer */}
-            <div className="border-t border-stone-150 pt-3 flex justify-between items-center text-[10px] text-stone-400">
+            <div className="border-t border-ivy-150 pt-3 flex justify-between items-center text-[10px] text-ivy-500">
               <span className="flex items-center gap-1">
                 <Server className="h-3.5 w-3.5 text-ivy-600" /> Drawn dynamically based on current template designs
               </span>

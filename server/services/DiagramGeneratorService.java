@@ -115,14 +115,75 @@ public class DiagramGeneratorService {
     }
 
     // ===================================
+    // Concrete Nomnoml Strategy Implementation
+    // ===================================
+
+    public static class NomnomlUseCaseGenerator extends UseCaseScriptTemplate {
+        @Override
+        protected String generateHeader() {
+            return "#direction: right\n#zoom: 1\n#bgColor: #fdfdfd\n#stroke: #333\n\n";
+        }
+
+        @Override
+        protected String defineActors(List<UseCase> useCases) {
+            Set<String> actorsSet = new java.util.LinkedHashSet<>();
+            for (UseCase uc : useCases) {
+                if (uc.getActors() != null) {
+                    for (String actor : uc.getActors()) {
+                        if (actor != null && !actor.trim().isEmpty()) {
+                            actorsSet.add(actor.trim());
+                        }
+                    }
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (String actor : actorsSet) {
+                sb.append("[<actor> ").append(actor).append("]\n");
+            }
+            if (!actorsSet.isEmpty()) sb.append("\n");
+            return sb.toString();
+        }
+
+        @Override
+        protected String generateUseCases(List<UseCase> useCases) {
+            StringBuilder sb = new StringBuilder();
+            for (UseCase uc : useCases) {
+                sb.append("[<usecase> ").append(uc.getTitle()).append("]\n");
+            }
+            if (!useCases.isEmpty()) sb.append("\n");
+            return sb.toString();
+        }
+
+        @Override
+        protected String createAssociations(List<UseCase> useCases) {
+            StringBuilder sb = new StringBuilder();
+            for (UseCase uc : useCases) {
+                if (uc.getActors() != null) {
+                    for (String actor : uc.getActors()) {
+                        if (actor != null && !actor.trim().isEmpty()) {
+                            sb.append("[<actor> ").append(actor).append("] -> [<usecase> ").append(uc.getTitle()).append("]\n");
+                        }
+                    }
+                }
+            }
+            return sb.toString();
+        }
+
+        @Override
+        protected String generateFooter() {
+            return "";
+        }
+    }
+
+    // ===================================
     // Factory method to resolve strategies
     // ===================================
 
     public static UseCaseScriptStrategy getUseCaseStrategy(String tool) {
-        if ("plantuml".equalsIgnoreCase(tool)) {
-            return new PlantUMLUseCaseGenerator();
+        if ("nomnoml".equalsIgnoreCase(tool)) {
+            return new NomnomlUseCaseGenerator();
         } else {
-            // Support simple fallback or additional engines
             return new PlantUMLUseCaseGenerator();
         }
     }

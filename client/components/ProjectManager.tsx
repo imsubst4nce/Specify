@@ -29,6 +29,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
   // collaborate/share states
   const [sharingProjectId, setSharingProjectId] = useState<string | null>(null);
   const [shareEmail, setShareEmail] = useState('');
+  const [teammates, setTeammates] = useState<any[]>([]);
   
   // operations/notifications state managers
   const [error, setError] = useState('');
@@ -36,6 +37,24 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem('token');
+
+  /**
+   * Fetches all registered users who can be teammates
+   */
+  const fetchTeammates = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch('/api/auth/users', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setTeammates(data);
+      }
+    } catch {
+      // Slidely ignore
+    }
+  };
 
   /**
    * Fetches the array of software requirements projects/dossiers from the backend API
@@ -62,6 +81,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
 
   useEffect(() => {
     fetchProjects();
+    fetchTeammates();
   }, []);
 
   /**
@@ -157,6 +177,37 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         setSharingProjectId(null);
         setError('');
         setSuccess(`Project is shared successfully!`);
+        await fetchProjects();
+      } else {
+        const err = await res.json();
+        setError(err.error || 'Failed to share project');
+      }
+    } catch {
+      setError('Network error sharing project');
+    }
+  };
+
+  /**
+   * Directly shares project with a specific selected teammate from lookup
+   */
+  const shareWithDirectEmail = async (id: string, email: string) => {
+    if (!email.trim() || !token) return;
+
+    try {
+      const res = await fetch(`/api/projects/${id}/share`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ email: email.trim() })
+      });
+
+      if (res.ok) {
+        setShareEmail('');
+        setSharingProjectId(null);
+        setError('');
+        setSuccess(`Project is shared successfully with ${email}!`);
         await fetchProjects();
       } else {
         const err = await res.json();
@@ -326,35 +377,89 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
  
                   {/* Share button or Form US18 (Share project with teammates) */}
                   {isSharingThis ? (
-                    <form
-                      onSubmit={(e) => handleShareProject(p.id, e)}
-                      onClick={(e) => e.stopPropagation()} // Avoid triggering project click
-                      className="flex items-center gap-1 bg-stone-50 p-1.5 rounded-lg border border-stone-200 mt-2"
-                    >
-                      <Mail className="h-3 w-3 text-stone-400 shrink-0 ml-1" />
-                      <input
-                        type="email"
-                        placeholder="Teammate's email..."
-                        value={shareEmail}
-                        onChange={e => setShareEmail(e.target.value)}
-                        className="w-full text-[10px] bg-transparent focus:outline-none border-none text-stone-700 pl-1 py-0.5"
-                        required
-                        autoFocus
-                      />
-                      <button
-                        type="submit"
-                        className="bg-ivy-600 hover:bg-ivy-700 text-white rounded px-2 py-0.5 text-[9px] font-bold"
+                    <div className="relative mt-2" onClick={(e) => e.stopPropagation()}>
+                      <form
+                        onSubmit={(e) => handleShareProject(p.id, e)}
+                        className="flex items-center gap-1 bg-stone-50 p-1.5 rounded-lg border border-stone-200"
                       >
-                        Share
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSharingProjectId(null)}
-                        className="text-[9px] hover:text-rose-600 text-stone-400 font-bold px-1"
-                      >
-                        X
-                      </button>
-                    </form>
+                        <Mail className="h-3 w-3 text-stone-400 shrink-0 ml-1" />
+                        <input
+                          type="text"
+                          placeholder="Teammate's email or name..."
+                          value={shareEmail}
+                          onChange={e => setShareEmail(e.target.value)}
+                          className="w-full text-[10px] bg-transparent focus:outline-none border-none text-stone-700 pl-1 py-0.5"
+                          required
+                          autoFocus
+                        />
+                        <button
+                          type="submit"
+                          className="bg-ivy-600 hover:bg-ivy-700 text-white rounded px-2 py-0.5 text-[9px] font-bold shrink-0"
+                        >
+                          Share
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSharingProjectId(null);
+                            setShareEmail('');
+                          }}
+                          className="text-[9px] hover:text-rose-600 text-stone-400 font-bold px-1 shrink-0"
+                        >
+                          X
+                        </button>
+                      </form>
+
+                      {/* Dropdown Suggestions */}
+                      {shareEmail.trim().length > 0 && (
+                        <div className="absolute top-full left-0 right-0 bg-white border border-stone-150 rounded-lg shadow-lg z-50 mt-1 max-h-40 overflow-y-auto font-sans leading-normal">
+                          {teammates.filter(t => 
+                            t.name.toLowerCase().includes(shareEmail.toLowerCase()) || 
+                            t.email.toLowerCase().includes(shareEmail.toLowerCase())
+                          ).length === 0 ? (
+                            <p className="p-2 text-[9px] text-stone-400 italic text-center">
+                              No matching registered user found. You can still type their email to invite them.
+                            </p>
+                          ) : (
+                            teammates.filter(t => 
+                              t.name.toLowerCase().includes(shareEmail.toLowerCase()) || 
+                              t.email.toLowerCase().includes(shareEmail.toLowerCase())
+                            ).map(t => (
+                              <button
+                                key={t.id}
+                                type="button"
+                                onClick={() => {
+                                  shareWithDirectEmail(p.id, t.email);
+                                }}
+                                className="w-full text-left px-2 py-1.5 hover:bg-stone-50 flex items-center justify-between transition-colors border-b border-stone-50 last:border-0 cursor-pointer text-[10px]"
+                              >
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                  {t.avatarUrl ? (
+                                    <img 
+                                      src={t.avatarUrl} 
+                                      alt={t.name}
+                                      referrerPolicy="no-referrer"
+                                      className="h-4 w-4 rounded-full object-cover border border-stone-200 shrink-0"
+                                    />
+                                  ) : (
+                                    <div className="h-4 w-4 rounded-full bg-ivy-100 text-ivy-700 flex items-center justify-center text-[8px] font-bold font-mono shrink-0">
+                                      {t.name[0]}
+                                    </div>
+                                  )}
+                                  <div className="flex flex-col min-w-0 leading-tight">
+                                    <span className="font-semibold text-stone-700 truncate">{t.name}</span>
+                                    <span className="text-[8px] text-stone-450 truncate">{t.email}</span>
+                                  </div>
+                                </div>
+                                <span className="text-[8px] text-ivy-600 font-bold hover:underline shrink-0 pl-1">
+                                  Select + Share
+                                </span>
+                              </button>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <div className="flex items-center justify-between gap-2 mt-2 pt-1">
                       {/* Trigger share widget */}

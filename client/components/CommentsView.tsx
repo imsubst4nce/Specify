@@ -127,7 +127,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
           Collaboration Comments on "{targetTitle}"
         </h4>
-        <span className="text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.5 rounded-full font-bold">
+        <span className="text-[10px] bg-ivy-700 text-ivy-100 px-1.5 py-0.5 rounded-full font-bold">
           {comments.length}
         </span>
       </div>

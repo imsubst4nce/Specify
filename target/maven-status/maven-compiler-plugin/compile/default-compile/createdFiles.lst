@@ -13,6 +13,7 @@ server\services\DiagramGeneratorService.class
 server\controllers\DiagramController.class
 server\services\DiagramGeneratorService$ClassDiagramScriptStrategy.class
 server\services\DiagramGeneratorService$PlantUMLUseCaseGenerator.class
+server\services\DiagramGeneratorService$NomnomlUseCaseGenerator.class
 server\domainmodel\User.class
 server\controllers\AuthController.class
 server\database\CommentRepository.class

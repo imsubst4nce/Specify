@@ -522,46 +522,46 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
             </div>
 
             {/* Structured Card Design mimicking actual paper indices */}
-            <div className="bg-amber-50/60 rounded-xl border border-amber-200 shadow-sm p-6 space-y-4 font-sans relative overflow-hidden">
-              {/* Lined paper visual elements */}
-              <div className="absolute top-0 bottom-0 left-12 w-0.5 bg-red-200/50"></div>
+            <div className="bg-ivy-100 rounded-xl border-t-4 shadow-md p-6 space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-lg">
+              {/* Lined paper visual elements - pinkish index card vertical line */}
+              <div className="absolute top-2 bottom-2 left-12 w-0.5 bg-ivy-300/50"></div>
               
-              <div className="pl-8 border-b border-amber-200 pb-3 flex justify-between items-start">
+              <div className="pl-8 border-b border-ivy-200 pb-3 flex justify-between items-start">
                 <div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-amber-800 bg-amber-200/75 px-1.5 py-0.5 rounded-sm">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-ivy-850 bg-ivy-100/80 border border-ivy-200 px-2 py-0.5 rounded">
                     CRC index Card Representation
                   </span>
-                  <h3 className="text-xl font-bold font-mono text-amber-900 mt-1">{selectedCard.className}</h3>
+                  <h3 className="text-xl font-bold font-mono text-ivy-950 mt-2">{selectedCard.className}</h3>
                 </div>
-                <div className="text-[10px] text-amber-700/80 font-mono italic max-w-[240px] text-right">
-                  {selectedCard.description || 'Holds core domain state.'}
+                <div className="text-[10px] text-ivy-700 font-mono italic max-w-[240px] text-right">
+                  {selectedCard.description || 'No Description'}
                 </div>
               </div>
 
               {/* physical layout grid */}
-              <div className="pl-8 grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[160px] divide-y md:divide-y-0 md:divide-x divide-amber-200">
+              <div className="pl-8 grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[160px] divide-y md:divide-y-0 md:divide-x divide-ivy-200/80">
                 {/* Responsibilities list */}
                 <div className="pr-2 pt-2 md:pt-0">
-                  <h4 className="text-[11px] font-bold text-amber-850 uppercase tracking-widest border-b border-amber-200/60 pb-1.5 mb-2.5">
+                  <h4 className="text-[11px] font-bold text-ivy-100 uppercase tracking-widest border-b border-ivy-200/50 pb-1.5 mb-2.5">
                     Responsibilities
                   </h4>
                   {selectedCard.responsibilities && selectedCard.responsibilities.length > 0 ? (
                     <ul className="space-y-2">
                       {selectedCard.responsibilities.map((resp, idx) => (
-                        <li key={idx} className="text-xs text-amber-900 flex items-start gap-1 p-0.5">
-                          <span className="text-[10px] text-amber-600 mt-0.5">•</span>
-                          <span>{resp}</span>
+                        <li key={idx} className="text-xs text-ivy-900 flex items-start gap-1 p-0.5">
+                          <span className="text-[10px] text-ivy-200 mt-0.5">•</span>
+                          <span className="text-ivy-200">{resp}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-xs text-amber-700/60 italic">No responsibility assigned</p>
+                    <p className="text-xs font-bold text-rose-400">[Error] Database could not retrieve responsibilities or corrupted</p>
                   )}
                 </div>
 
                 {/* Collaborators list */}
                 <div className="md:pl-6 pt-4 md:pt-0">
-                  <h4 className="text-[11px] font-bold text-amber-850 uppercase tracking-widest border-b border-amber-200/60 pb-1.5 mb-2.5">
+                  <h4 className="text-[11px] font-bold text-ivy-100 uppercase tracking-widest border-b border-ivy-200/50 pb-1.5 mb-2.5">
                     Collaborators
                   </h4>
                   {selectedCard.collaborators && selectedCard.collaborators.length > 0 ? (
@@ -569,21 +569,21 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                       {selectedCard.collaborators.map((collab, idx) => (
                         <span
                           key={idx}
-                          className="bg-amber-100 text-amber-900 border border-amber-200 font-mono px-2 py-0.5 rounded text-[10px] font-bold"
+                          className="bg-ivy-100 text-ivy-950 border border-ivy-200 font-mono px-2 py-0.5 rounded text-[10px] font-bold shadow-3xs"
                         >
                           {collab}
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs text-amber-700/60 italic">No collaborator class relationships mapped</p>
+                    <p className="text-xs font-bold text-ivy-555">No collaborator class relationships</p>
                   )}
                 </div>
               </div>
 
               {/* Supported linked Use Cases footer */}
-              <div className="pl-8 pt-3 border-t border-amber-200/60 flex items-center justify-between text-[11px] text-amber-850">
-                <span className="font-semibold uppercase tracking-wider">Linked Use Cases:</span>
+              <div className="pl-8 pt-3 border-t border-ivy-200/80 flex items-center justify-between text-[11px] text-ivy-800">
+                <span className="font-semibold uppercase tracking-wider text-ivy-300">Linked Use Cases:</span>
                 <div className="flex flex-wrap gap-1 md:max-w-md justify-end">
                   {selectedCard.linkedUseCaseIds && selectedCard.linkedUseCaseIds.length > 0 ? (
                     selectedCard.linkedUseCaseIds.map(uid => {
@@ -591,15 +591,15 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                       return (
                         <span
                           key={uid}
-                          className="bg-white/90 border border-amber-200 text-amber-900 rounded-lg px-2 py-0.5 text-[9px] font-bold max-w-[150px] truncate"
-                          title={matched?.title || 'System Specification'}
+                          className="bg-white border border-ivy-400 text-ivy-900 rounded-lg px-2 py-0.5 text-[9px] font-bold max-w-[150px] truncate shadow-3xs"
+                          title={matched?.title || 'NULL'}
                         >
-                          {matched ? matched.title : 'Specification'}
+                          {matched ? matched.title : 'NULL'}
                         </span>
                       );
                     })
                   ) : (
-                    <span className="text-amber-700/60 italic text-[10px]">No linked use case mappings. Link Use Cases to CRC Cards to show behavioral support</span>
+                    <span className="text-ivy-300 italic text-[10px]">No linked use case mappings</span>
                   )}
                 </div>
               </div>

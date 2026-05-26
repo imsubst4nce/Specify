@@ -1,29 +1,39 @@
 package server.config;
 
-/**
- * Spring Security configuration to validate JWT session tokens, 
- * secure API endpoints, and enable collaborative CORS headers.
- */
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    /*
-     * Note: In a production Spring Boot environment, you would annotate this with:
-     * @Configuration
-     * @EnableWebSecurity
-     * 
-     * Inside this configuration, we declare:
-     * 
-     * 1. CORS Filters: Allows secure WebSocket connections and REST requests from authenticated clients.
-     * 2. SecurityFilterChain: 
-     *    - Permissive access to "/api/auth/register" and "/api/auth/login"
-     *    - SessionCreationPolicy.STATELESS for JWT tokens
-     *    - Adding JwtRequestFilter prior to UsernamePasswordAuthenticationFilter.
-     */
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configure(http))
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().permitAll()
+            )
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
+        return http.build();
+    }
 
-    public void configureSecurity() {
-        // Pseudo implementation details demonstrating safe claims evaluation
-        System.out.println("Initializing Web Security Pipeline...");
-        System.out.println("Configuring Stateless Session Management...");
-        System.out.println("Registering JWT filter rules matching /api/**...");
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

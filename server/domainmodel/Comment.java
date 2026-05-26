@@ -32,7 +32,7 @@ public class Comment {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "avatar_url", length = 1048576) // Support Base64 inline avatar strings
+    @Column(name = "avatar_url", columnDefinition = "LONGTEXT") // Support Base64 inline avatar strings
     private String avatarUrl;
 
     @Column(nullable = false, columnDefinition = "TEXT")

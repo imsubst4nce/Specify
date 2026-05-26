@@ -23,10 +23,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String password; // Stored as a BCrypt-encrypted password hash
 
-    @Column(name = "avatar_url", length = 1048576) // Support Base64 inline avatar strings
+    @Column(name = "avatar_url", columnDefinition = "LONGTEXT") // Support Base64 inline avatar strings
     private String avatarUrl;
 
     @Column(name = "created_at", nullable = false)

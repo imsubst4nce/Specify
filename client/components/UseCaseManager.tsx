@@ -219,12 +219,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
         {useCases.length === 0 ? (
           <div className="text-center py-8 border border-dashed border-slate-200 rounded-lg">
             <p className="text-xs text-slate-400 italic">No use cases defined yet</p>
-            <button
-              onClick={startCreate}
-              className="text-[11px] text-ivy-600 hover:underline font-semibold mt-2 block mx-auto cursor-pointer"
-            >
-              Start specifications here
-            </button>
           </div>
         ) : (
           <div className="space-y-1.5 max-h-[450px] overflow-y-auto pr-1">
@@ -241,17 +235,17 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                   }}
                   className={`flex justify-between items-center p-3 rounded-lg border text-left cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
-                      : 'bg-slate-50 border-slate-200/60 hover:border-slate-300 text-slate-700'
+                      ? 'bg-ivy-900 border-ivy-900 text-white shadow-xs'
+                      : 'bg-ivy-50 border-ivy-200/60 text-ivy-100'
                   }`}
                 >
                   <div className="min-w-0 pr-2">
                     <p className="text-xs font-bold truncate">{uc.title}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className={`text-[9px] px-1 rounded-sm font-medium ${isSelected ? 'bg-slate-800 text-slate-300' : 'bg-slate-200 text-slate-600'}`}>
+                      <span className={`text-[9px] px-1 rounded-sm font-medium ${isSelected ? 'bg-ivy-800 text-ivy-100' : 'text-ivy-100'}`}>
                         {(uc.actors || []).length} Actors
                       </span>
-                      <span className={`text-[9px] px-1 rounded-sm font-medium ${isSelected ? 'bg-slate-800 text-slate-300' : 'bg-slate-200 text-slate-600'}`}>
+                      <span className={`text-[9px] px-1 rounded-sm font-medium ${isSelected ? 'bg-ivy-800 text-ivy-100' : 'text-ivy-100'}`}>
                         {(uc.mainFlow || []).length} Steps
                       </span>
                     </div>
@@ -261,7 +255,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                       e.stopPropagation();
                       deleteUseCase(uc);
                     }}
-                    className={`p-1 rounded-md transition-colors ${isSelected ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-400 hover:text-rose-600 hover:bg-slate-100'}`}
+                    className={`p-1 rounded-md transition-colors ${isSelected ? 'text-slate-100 hover:bg-rose-600' : 'text-slate-100 hover:bg-rose-600'}`}
                     title="Delete specification"
                   >
                     <Trash className="h-3.5 w-3.5" />

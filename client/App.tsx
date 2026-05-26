@@ -237,12 +237,6 @@ export default function App() {
 
               <div className="flex items-center gap-3 shrink-0 z-10 w-full sm:w-auto justify-end">
                 <button
-                  onClick={() => setIsEditingProfile(true)}
-                  className="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold rounded-lg transition-all cursor-pointer shadow-3xs hover:shadow-2xs border border-stone-200"
-                >
-                  Edit Profile
-                </button>
-                <button
                   onClick={() => setHomeTab(homeTab === 'projects' ? 'guidelines' : 'projects')}
                   className="px-4 py-2 bg-ivy-700 hover:bg-ivy-800 text-white text-xs font-bold rounded-lg transition-all cursor-pointer shadow-3xs hover:shadow-2xs border border-ivy-800"
                 >
