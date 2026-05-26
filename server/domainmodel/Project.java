@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Spring JPA Entity representing a Design and Requirements Dossier (Project).
- */
 @Entity
 @Table(name = "projects")
 public class Project {
@@ -30,12 +27,12 @@ public class Project {
     private String description;
 
     @Column(name = "owner_id", nullable = false)
-    private String ownerId; // Owner of the project dossier
+    private String ownerId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "project_collaborators", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "collaborator_email")
-    private List<String> sharedWith = new ArrayList<>(); // Email list of team collaborators
+    private List<String> sharedWith = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -52,7 +49,6 @@ public class Project {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

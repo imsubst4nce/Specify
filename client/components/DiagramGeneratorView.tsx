@@ -6,32 +6,19 @@ interface DiagramGeneratorViewProps {
   projectId: string;
 }
 
-/**
- * Component to present UML diagrams (Use Case & Class definitions) in a structured live format
- * and generate compliant scripts under chosen tools (PlantUML, Nomnoml).
- */
 export default function DiagramGeneratorView({ projectId }: DiagramGeneratorViewProps) {
-  // active rendering target (Use Case representations vs Class Diagram models)
   const [diagramType, setDiagramType] = useState<'usecase' | 'class'>('usecase');
-  // chosen schema translation generator type
   const [selectedTool, setSelectedTool] = useState<'plantuml' | 'nomnoml'>('plantuml');
-  // compiled text script output holder
   const [script, setScript] = useState('');
-  // click copy action feedback check state
   const [copied, setCopied] = useState(false);
-  // execution and connection error notifications indicators
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Local state replicas of usecases and CRC definitions supporting client-side preview rendering
   const [useCases, setUseCases] = useState<UseCase[]>([]);
   const [crcCards, setCrcCards] = useState<CRCCard[]>([]);
 
   const token = localStorage.getItem('token');
 
-  /**
-   * Fetches the generated text script from backend microservice according to chosen Strategy configurations
-   */
   const generateDiagramScript = async () => {
     if (!token) return;
     try {
@@ -58,9 +45,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
     }
   };
 
-  /**
-   * Loads both UseCase objects and CRCCard designs to redraw interactive visual nodes
-   */
   const fetchLocalDependencies = async () => {
     if (!token) return;
     try {
@@ -92,18 +76,12 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
     fetchLocalDependencies();
   }, [projectId]);
 
-  /**
-   * Writes the generated text script to clipboard
-   */
   const handleCopy = () => {
     navigator.clipboard.writeText(script);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  /**
-   * Aggregates a listing of all unique Actor strings declared in project specs
-   */
   const getUniqueActors = () => {
     const actorsSet = new Set<string>();
     useCases.forEach(uc => {
@@ -118,7 +96,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
 
   return (
     <div className="space-y-6" id="diagram-generator-view-root">
-       {/* Top controls card */}
       <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-2xs">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
@@ -126,7 +103,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            {/* Diagram select tab */}
             <div className="bg-ivy-50 p-0.5 rounded-lg flex text-xs border border-ivy-100">
               <button 
                 onClick={() => setDiagramType('usecase')}
@@ -150,7 +126,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
               </button>
             </div>
 
-            {/* Strategy Selection tool tool */}
             <div className="flex items-center gap-1.5 bg-ivy-50 p-0.5 rounded-lg text-xs border border-ivy-100">
               <button 
                 onClick={() => setSelectedTool('plantuml')}
@@ -186,10 +161,8 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
         </div>
       </div>
 
-      {/* Main Two-Panel Layout: Custom Live visual Preview on Left, Generated Script playground on Right */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         
-        {/* NATIVE VISUAL UML RENDERER GRAPH (Outstanding Visual Polish UX) */}
         <div className="xl:col-span-7 bg-white p-5 rounded-xl border border-slate-100 shadow-2xs space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
@@ -202,7 +175,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
           <div className="bg-slate-50/50 rounded-xl border border-slate-200 min-h-[380px] p-6 flex flex-col justify-between overflow-hidden relative" id="visual-uml-sandbox">
             
             {diagramType === 'usecase' ? (
-              /* USE CASE LIVE DIAGRAM */
               useCases.length === 0 ? (
                 <div className="m-auto text-center space-y-1">
                   <span className="text-xs text-slate-400 italic">No Use Cases specified yet</span>
@@ -218,7 +190,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                           key={uc.id} 
                           className="bg-white rounded-lg border border-ivy-200 p-3.5 shadow-3xs flex items-center justify-between gap-4 transition-all hover:border-ivy-350 hover:shadow-xs"
                         >
-                          {/* Actor(s) Column - Left side */}
                           <div className="w-1/3 flex items-center gap-2">
                             {validActors.length === 0 ? (
                               <div className="flex items-center gap-2 bg-ivy-50 border border-ivy-200 rounded px-2.5 py-1.5 min-w-[100px] border-dashed">
@@ -235,7 +206,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                                     key={idx} 
                                     className="flex items-center gap-1.5 bg-ivy-50 border border-ivy-100 rounded px-2 py-1 min-w-[90px] max-w-[130px]"
                                   >
-                                    {/* Minimal stick-man head & torso via SVG */}
                                     <svg className="h-4 w-4 text-ivy-700 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
                                       <circle cx={12} cy={7} r={4} />
                                       <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
@@ -249,7 +219,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                             )}
                           </div>
 
-                          {/* Connection Arrow - Middle column */}
                           <div className="w-1/6 flex justify-center text-center">
                             <div className="flex flex-col items-center select-none">
                               <ArrowRight className="h-4 w-4 text-ivy-700" />
@@ -259,7 +228,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                             </div>
                           </div>
 
-                          {/* Use Case Oval Boundary - Right side */}
                           <div className="w-1/2 flex justify-end">
                             <div className="w-full max-w-[210px] bg-ivy-50 hover:bg-ivy-100/50 border-2 border-ivy-150 rounded-full px-4 py-2 text-center transition-all hover:scale-[1.01] hover:border-ivy-300 cursor-default flex items-center justify-center min-h-[42px] shadow-3xs">
                               <span className="font-serif font-bold text-[10.5px] text-ivy-950 leading-tight">
@@ -274,7 +242,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                 </div>
               )
             ) : (
-              /* CLASS / CRC CARD LIVE DIAGRAM */
               crcCards.length === 0 ? (
                 <div className="m-auto text-center space-y-1">
                   <span className="text-xs text-slate-400 italic">No CRC Cards specified yet</span>
@@ -319,7 +286,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
           </div>
         </div>
 
-        {/* CODE PLAYGROUND - SCRIPT OUTPUT */}
         <div className="xl:col-span-5 bg-white rounded-xl border border-slate-100 shadow-2xs overflow-hidden flex flex-col justify-between">
           
           <div className="bg-slate-900 px-5 py-4 border-b border-slate-800 flex justify-between items-center">

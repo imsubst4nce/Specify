@@ -13,9 +13,6 @@ import server.domainmodel.User;
 
 import java.util.*;
 
-/**
- * Spring REST Controller managing Class Responsibility Collaborator (CRC) index cards.
- */
 @RestController
 @RequestMapping("/api/projects/{projectId}/crccards")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -142,7 +139,6 @@ public class CRCCardController {
         return ResponseEntity.ok(res);
     }
 
-    // US13 Associate/Link Use Cases list
     @PostMapping("/{id}/link")
     public ResponseEntity<CRCCard> linkUseCases(
             @RequestHeader("Authorization") String tokenHeader,

@@ -13,9 +13,6 @@ import server.domainmodel.User;
 
 import java.util.*;
 
-/**
- * Spring REST Controller managing collaborative boards comments threads (US19).
- */
 @RestController
 @RequestMapping("/api/comments")
 @CrossOrigin(origins = "*", allowedHeaders = "*")

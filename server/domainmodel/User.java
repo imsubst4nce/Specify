@@ -6,9 +6,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 
-/**
- * Spring JPA Entity representing a Registered User in the system database.
- */
 @Entity
 @Table(name = "users")
 public class User {
@@ -24,15 +21,14 @@ public class User {
     private String email;
 
     @Column(name = "password_hash", nullable = false)
-    private String password; // Stored as a BCrypt-encrypted password hash
+    private String password;
 
-    @Column(name = "avatar_url", columnDefinition = "LONGTEXT") // Support Base64 inline avatar strings
+    @Column(name = "avatar_url", columnDefinition = "LONGTEXT")
     private String avatarUrl;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    // Default constructor for serialization/JPA
     public User() {
         this.createdAt = LocalDateTime.now();
     }
@@ -46,7 +42,6 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

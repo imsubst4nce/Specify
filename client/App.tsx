@@ -9,42 +9,25 @@ import CRCCardManager from './components/CRCCardManager.js';
 import DiagramGeneratorView from './components/DiagramGeneratorView.js';
 import { Project } from './types/index.js';
 
-/**
- * Main application component for SpecFlow, managing authentication state,
- * routing tabs, active dossier/project workspaces, and global error notices.
- */
 export default function App() {
-  // state for holding authenticated user info (ID, name, email)
   const [user, setUser] = useState<{ id: string; name: string; email: string; avatarUrl?: string } | null>(null);
-  // authorization bearer token
   const [token, setToken] = useState<string | null>(null);
-  // currently selected dossier/project for requirements specification
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
-  // currently active navigation tab in a project workspace
   const [activeTab, setActiveTab] = useState<'usecases' | 'crccards' | 'diagrams' | 'help'>('usecases');
-  // state checking if user has profile edit mode active
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   
-  // Dashboard view toggle if user is on the main landing page (projects vs general compliance guidelines)
   const [homeTab, setHomeTab] = useState<'projects' | 'guidelines'>('projects');
 
-  // Dark Mode Configuration (Locked to Dark Theme - UI theme defaults permanently to dark)
   const isDarkMode = true;
 
-  // Effect to synchronize the HTML document root element to always ensure dark theme
   useEffect(() => {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
   }, []);
 
-  // indicates if application is checking for saved authentication state
   const [loading, setLoading] = useState(true);
-  // global error notification banner state
   const [error, setError] = useState('');
 
-  /**
-   * Effect to auto load active session token from local storage when application boots
-   */
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     if (savedToken) {
@@ -55,9 +38,6 @@ export default function App() {
     }
   }, []);
 
-  /**
-   * Fetches user profile using the active JWT token from backend to restore session
-   */
   const fetchProfile = async (tk: string) => {
     try {
       setLoading(true);
@@ -71,7 +51,6 @@ export default function App() {
         setUser(data);
         setError('');
       } else {
-        // Log out user if session validation fails
         handleLogout();
       }
     } catch {
@@ -81,9 +60,6 @@ export default function App() {
     }
   };
 
-  /**
-   * Callback invoked upon successful authentication to initialize session
-   */
   const handleAuthSuccess = (u: any, tk: string) => {
     setUser(u);
     setToken(tk);
@@ -91,9 +67,6 @@ export default function App() {
     setError('');
   };
 
-  /**
-   * Clears tokens and project context when logging out
-   */
   const handleLogout = () => {
     localStorage.removeItem('token');
     setUser(null);
@@ -112,11 +85,9 @@ export default function App() {
     );
   }
 
-  // Not Authenticated -> Show beautiful auth portals (US1)
   if (!token || !user) {
     return (
       <div className="min-h-screen relative transition-colors duration-300 dark bg-wood-955 text-stone-200 flex flex-col justify-between py-12 px-6 font-sans">
-        {/* Top-left Minimal Branding Logo */}
         <div className="absolute top-4 left-4 z-50 flex items-center gap-3.5 select-none animate-fade-in">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-ivy-500 to-indigo-600 text-sm font-extrabold text-white tracking-widest shadow-2xs">
             S
@@ -137,11 +108,9 @@ export default function App() {
     );
   }
 
-  // Authenticated Workspace
   return (
     <div className="min-h-screen transition-colors duration-300 dark bg-wood-955 text-stone-200 flex flex-col font-sans" id="app-workspace-root">
       
-      {/* Top Main Navbar */}
       <Navigation
         userName={user.name}
         userEmail={user.email}
@@ -156,7 +125,6 @@ export default function App() {
 
       <main className="flex-grow p-4 md:p-6 max-w-7xl w-full mx-auto space-y-6">
         
-        {/* Error notification fallback banners */}
         {error && (
           <div className="bg-rose-50 border border-rose-100 p-3 rounded-xl flex items-start gap-2 text-rose-600 text-[11px]">
             <ShieldAlert className="h-4.5 w-4.5 text-rose-505 shrink-0" />
@@ -165,7 +133,6 @@ export default function App() {
         )}
 
         {isEditingProfile ? (
-          /* PROFILE SCREEN (US2) */
           <div className="py-6">
             <AuthPage
               editMode={true}
@@ -178,11 +145,8 @@ export default function App() {
             />
           </div>
         ) : !currentProject ? (
-          /* DIRECTORY HOMEPAGE WORKSPACE (US4) */
           <div className="space-y-6">
-            {/* Elegant Dashboard Welcome profile card (Shows User Avatar & Profile details) */}
             <div className="bg-white p-6 rounded-2xl border border-stone-150/80 shadow-md hover:shadow-lg transition-all flex flex-col sm:flex-row items-center justify-between gap-5 relative overflow-hidden" id="dashboard-welcome-banner">
-              {/* Decorative premium accent vectors */}
               <div className="absolute top-0 right-0 h-40 w-40 bg-ivy-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
               
               <div className="flex items-center gap-4.5 z-10">
@@ -221,9 +185,7 @@ export default function App() {
 
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
             
-            {/* Left Column: Projects lists & Create widget */}
             <div className="xl:col-span-8 space-y-5">
-              {/* Home toggleable view tabs for quick layout navigation */}
               <div className="pb-2 flex justify-between items-center bg-white p-2 rounded-xl border border-stone-150 shadow-3xs">
                 <div className="bg-stone-100 p-0.5 rounded-lg flex text-xs font-semibold">
                   <button
@@ -261,11 +223,9 @@ export default function App() {
               )}
             </div>
 
-            {/* Right Column: Concept Overview & Quick Steps */}
             <div className="xl:col-span-4 space-y-5">
               {homeTab === 'projects' && (
                 <>
-                  {/* Elegant Quick Concepts & Workflow Checklist */}
                   <div className="bg-white p-5 rounded-xl border border-stone-150 shadow-2xs space-y-4">
                     <h4 className="text-xs font-bold text-stone-900 uppercase tracking-widest flex items-center gap-1.5 pb-2 border-b border-stone-100 font-sans">
                       <BookOpen className="h-4 w-4 text-ivy-600" /> Getting Started
@@ -304,10 +264,8 @@ export default function App() {
           </div>
           </div>
         ) : (
-          /* INDIVIDUAL PRODUCT DRILL-DOWN CONTAINER WORKSPACE (US7 - US19) */
           <div className="space-y-6">
             
-            {/* Folder Header Breadcrumb banner with back actions */}
             <div className="bg-white p-6 rounded-xl border border-stone-150/80 shadow-2xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="flex items-center gap-3">
                 <button
@@ -329,7 +287,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Workspaces secondary horizontal tab navigators */}
               <div className="bg-stone-100 p-0.5 rounded-lg flex text-xs font-semibold overflow-x-auto max-w-full">
                 <button
                   onClick={() => setActiveTab('usecases')}
@@ -374,7 +331,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Active Workspace View Mapper */}
             <div className="min-h-[480px]">
               {activeTab === 'usecases' && (
                 <UseCaseManager projectId={currentProject.id} currentUserId={user.id} />
@@ -395,7 +351,6 @@ export default function App() {
 
       </main>
 
-      {/* Unified footer credits info banner */}
       <footer className="bg-white border-t border-slate-150 py-5 text-center text-[10px] text-slate-400 font-mono mt-12 shrink-0">
         <div>Specify • Software Design & Analysis Workspace</div>
         <div className="mt-1">Copyrights • 2026</div>

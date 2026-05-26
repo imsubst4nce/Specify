@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Spring JPA Entity representing a formal software Use Case specification.
- */
 @Entity
 @Table(name = "use_cases")
 public class UseCase {
@@ -42,7 +39,7 @@ public class UseCase {
     @CollectionTable(name = "use_case_main_flow", joinColumns = @JoinColumn(name = "use_case_id"))
     @Column(name = "flow_step", columnDefinition = "TEXT")
     @OrderColumn(name = "step_index")
-    private List<String> mainFlow = new ArrayList<>(); // Sequential list of event steps
+    private List<String> mainFlow = new ArrayList<>();
 
     @Column(name = "postconditions", columnDefinition = "TEXT")
     private String postconditions;
@@ -54,7 +51,6 @@ public class UseCase {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

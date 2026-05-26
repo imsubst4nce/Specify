@@ -6,15 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
-/**
- * Strategy/Factory & Template Method Pattern definitions in Java
- * to generate UML scripts for PlantUML & Nomnoml from project components.
- */
 public class DiagramGeneratorService {
-
-    // ===================================
-    // Strategies Definitions
-    // ===================================
 
     public interface UseCaseScriptStrategy {
         String generate(List<UseCase> useCases);
@@ -23,10 +15,6 @@ public class DiagramGeneratorService {
     public interface ClassDiagramScriptStrategy {
         String generate(List<CRCCard> crcCards);
     }
-
-    // ===================================
-    // Template Methods
-    // ===================================
 
     public static abstract class UseCaseScriptTemplate implements UseCaseScriptStrategy {
         @Override
@@ -46,10 +34,6 @@ public class DiagramGeneratorService {
         protected abstract String createAssociations(List<UseCase> useCases);
         protected abstract String generateFooter();
     }
-
-    // ===================================
-    // Concrete PlantUML Strategy Implementation
-    // ===================================
 
     public static class PlantUMLUseCaseGenerator extends UseCaseScriptTemplate {
         @Override
@@ -113,11 +97,6 @@ public class DiagramGeneratorService {
             return "\n@endum\n";
         }
     }
-
-    // ===================================
-    // Concrete Nomnoml Strategy Implementation
-    // ===================================
-
     public static class NomnomlUseCaseGenerator extends UseCaseScriptTemplate {
         @Override
         protected String generateHeader() {
@@ -175,10 +154,6 @@ public class DiagramGeneratorService {
             return "";
         }
     }
-
-    // ===================================
-    // Factory method to resolve strategies
-    // ===================================
 
     public static UseCaseScriptStrategy getUseCaseStrategy(String tool) {
         if ("nomnoml".equalsIgnoreCase(tool)) {

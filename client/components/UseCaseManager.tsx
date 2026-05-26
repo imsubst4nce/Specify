@@ -8,22 +8,14 @@ interface UseCaseManagerProps {
   currentUserId?: string;
 }
 
-/**
- * Component to manage, model, edit, and link Use Case software requirements
- * for a selected project workspace context.
- */
 export default function UseCaseManager({ projectId, currentUserId }: UseCaseManagerProps) {
-  // list of requirements retrieved for this project dossier
   const [useCases, setUseCases] = useState<UseCase[]>([]);
-  // active use case selection displayed in details panel
   const [selectedUC, setSelectedUC] = useState<UseCase | null>(null);
   
-  // panel flow and modal form switches
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
   
-  // input form fields mapped to Use Case model structures
   const [title, setTitle] = useState('');
   const [actorsString, setActorsString] = useState('');
   const [preconditions, setPreconditions] = useState('');
@@ -33,9 +25,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
 
   const token = localStorage.getItem('token');
 
-  /**
-   * Loads list of Use Cases for the active project dossier from the API
-   */
   const fetchUseCases = async () => {
     if (!token) return;
     try {
@@ -48,7 +37,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
         if (data.length > 0 && !selectedUC) {
           setSelectedUC(data[0]);
         } else if (data.length > 0) {
-          // Keep current selection synced
           const current = data.find((u: UseCase) => u.id === selectedUC?.id);
           setSelectedUC(current || data[0]);
         } else {
@@ -64,9 +52,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
     fetchUseCases();
   }, [projectId]);
 
-  /**
-   * Initializes state variables to clear form and begin defining a new use case
-   */
   const startCreate = () => {
     setTitle('');
     setActorsString('');
@@ -78,9 +63,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
     setIsEditing(false);
   };
 
-  /**
-   * Populates form fields with existing use case data to start edit mode
-   */
   const startEdit = (uc: UseCase) => {
     setTitle(uc.title);
     setActorsString((uc.actors || []).join(', '));
@@ -107,9 +89,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
     setSteps(updated);
   };
 
-  /**
-   * Dispatches create or update request to backend database endpoints
-   */
   const saveUseCase = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
@@ -197,7 +176,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" id="usecase-manager-root">
-      {/* Sidebar - Use Case List */}
       <div className="lg:col-span-4 bg-white p-4 rounded-xl border border-slate-100 shadow-2xs space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider font-sans">Use Cases</h3>
@@ -262,10 +240,8 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
         )}
       </div>
 
-      {/* Main Panel - Actions & Detail Form */}
       <div className="lg:col-span-8">
         {isCreating || isEditing ? (
-          /* Form (US7, US8) */
           <form onSubmit={saveUseCase} className="bg-white p-6 rounded-xl border border-slate-100 shadow-2xs space-y-5">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
               <button
@@ -290,7 +266,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
             )}
 
             <div className="space-y-4">
-              {/* Title */}
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
                   Use Case Title <span className="text-rose-600 font-extrabold ml-1" title="Required">*</span>
@@ -305,7 +280,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 />
               </div>
 
-              {/* Actors */}
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
                   Actors
@@ -319,7 +293,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 />
               </div>
 
-              {/* Preconditions */}
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
                   Pre-conditions
@@ -332,7 +305,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 />
               </div>
 
-              {/* Main Flow Steps (US7, US8) */}
               <div>
                 <div className="flex justify-between items-center mb-1.5">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
@@ -374,7 +346,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 </div>
               </div>
 
-              {/* Postconditions */}
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
                   Post-conditions
@@ -409,7 +380,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
             </div>
           </form>
         ) : selectedUC ? (
-          /* Detail Display Workspace (US9, US19) */
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-2xs space-y-6">
               <div className="flex justify-between items-start gap-3 border-b border-slate-100 pb-4">
@@ -428,9 +398,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 </button>
               </div>
 
-              {/* Body */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Left side: Actors & conditions */}
                 <div className="space-y-4">
                   <div>
                     <h5 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
@@ -471,7 +439,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                   </div>
                 </div>
 
-                {/* Right side: Steps Flow */}
                 <div>
                   <h5 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
                     <ListOrdered className="h-3.5 w-3.5 text-ivy-600" /> Main Flow
@@ -494,7 +461,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
               </div>
             </div>
 
-            {/* US19 - Conversation comments */}
             <CommentsView
               projectId={projectId}
               targetType="usecase"
@@ -514,7 +480,6 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
         )}
       </div>
 
-      {/* Custom dialog for deleting usecase */}
       {useCaseToDelete && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" onClick={(e) => e.stopPropagation()}>
           <div className="bg-white rounded-xl border border-slate-100 shadow-xl max-w-sm w-full p-5 space-y-4">

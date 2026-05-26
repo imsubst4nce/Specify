@@ -9,10 +9,6 @@ interface NavigationProps {
   onHomeClick?: () => void;
 }
 
-/**
- * Component for top navigation bar displaying the authenticated user identity,
- * application name, settings access, and sign out control buttons.
- */
 export default function Navigation({ userName, userEmail, avatarUrl, onLogout, onEditProfile, onHomeClick }: NavigationProps) {
   return (
     <nav className="bg-wood-900 text-stone-100 border-b border-wood-850 px-6 py-4.5 flex items-center justify-between" id="app-navigation">
@@ -31,7 +27,6 @@ export default function Navigation({ userName, userEmail, avatarUrl, onLogout, o
       </button>
 
       <div className="flex items-center gap-4">
-        {/* Dynamic User Avatar Preview Toggle */}
         {avatarUrl ? (
             <img 
               src={avatarUrl} 
@@ -45,8 +40,6 @@ export default function Navigation({ userName, userEmail, avatarUrl, onLogout, o
             </div>
         )}
         
-
-        {/* User Info & Settings Action */}
         <div className="hidden sm:flex flex-col items-end text-right">
           <span className="text-xs font-bold text-stone-100">{userName}</span>
           <span className="text-xs text-stone-400 font-mono">{userEmail}</span>

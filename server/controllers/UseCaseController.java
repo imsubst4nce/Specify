@@ -13,9 +13,6 @@ import server.domainmodel.User;
 
 import java.util.*;
 
-/**
- * Spring REST Controller managing Use Case specifications in projects.
- */
 @RestController
 @RequestMapping("/api/projects/{projectId}/usecases")
 @CrossOrigin(origins = "*", allowedHeaders = "*")

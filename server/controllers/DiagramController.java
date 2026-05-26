@@ -16,9 +16,6 @@ import server.services.DiagramGeneratorService;
 
 import java.util.*;
 
-/**
- * Spring REST Controller managing Dynamic UML Diagrams compilation queries.
- */
 @RestController
 @RequestMapping("/api/projects/{projectId}/diagrams")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -52,9 +49,6 @@ public class DiagramController {
                p.getSharedWith().stream().anyMatch(email -> email.equalsIgnoreCase(user.getEmail()));
     }
 
-    /**
-     * Compiles Use Cases script matching selected Tool Strategy (UC-02)
-     */
     @GetMapping("/usecases")
     public ResponseEntity<Map<String, String>> getUseCaseDiagram(
             @RequestHeader("Authorization") String tokenHeader,
@@ -77,9 +71,6 @@ public class DiagramController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Compiles CRC card dependencies diagram script matching tool strategy
-     */
     @GetMapping("/classes")
     public ResponseEntity<Map<String, String>> getClassDiagram(
             @RequestHeader("Authorization") String tokenHeader,
@@ -93,7 +84,6 @@ public class DiagramController {
 
         List<CRCCard> crcCards = crcCardRepository.findByProjectId(projectId);
         
-        // Define standard default Class Diagram generation
         StringBuilder sb = new StringBuilder();
         if ("plantuml".equalsIgnoreCase(tool)) {
             sb.append("@startuml\n' Class / CRC Card Diagram\n\n");
@@ -114,7 +104,6 @@ public class DiagramController {
             }
             sb.append("@endum\n");
         } else {
-            // Nomnoml default fallback
             sb.append("// Nomnoml CRC Diagram\n");
             for (CRCCard card : crcCards) {
                 String safeClass = card.getClassName().replaceAll("[^a-zA-Z0-9]", "_");

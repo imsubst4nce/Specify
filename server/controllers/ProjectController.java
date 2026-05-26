@@ -11,9 +11,6 @@ import server.domainmodel.User;
 
 import java.util.*;
 
-/**
- * Spring REST Controller managing Projects CRUD operations and Team sharing invitations.
- */
 @RestController
 @RequestMapping("/api/projects")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -33,9 +30,6 @@ public class ProjectController {
         return userRepository.findById(token).orElse(null);
     }
 
-    /**
-     * Lists active user projects directories (US4)
-     */
     @GetMapping
     public ResponseEntity<List<Project>> listProjects(@RequestHeader("Authorization") String tokenHeader) {
         User user = resolveUser(tokenHeader);
@@ -43,10 +37,8 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // Get projects owned by the user
         List<Project> owned = projectRepository.findByOwnerId(user.getId());
         
-        // Get projects shared with the user's email
         List<Project> shared = projectRepository.findBySharedWithContaining(user.getEmail().toLowerCase());
 
         Set<Project> allProjects = new LinkedHashSet<>(owned);
@@ -55,9 +47,6 @@ public class ProjectController {
         return ResponseEntity.ok(new ArrayList<>(allProjects));
     }
 
-    /**
-     * Fetches details of a specific requirements project dossier
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProject(
             @RequestHeader("Authorization") String tokenHeader,
@@ -85,9 +74,6 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
 
-    /**
-     * Creates new software dossier folder (US5)
-     */
     @PostMapping
     public ResponseEntity<Project> createProject(
             @RequestHeader("Authorization") String tokenHeader,
@@ -110,9 +96,6 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    /**
-     * Safe Project Deletion & cascading workspace scrubbing (US6)
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteProject(
             @RequestHeader("Authorization") String tokenHeader,
@@ -144,9 +127,6 @@ public class ProjectController {
         return ResponseEntity.ok(res);
     }
 
-    /**
-     * Shares project model access coordinates with collaboration email (US18)
-     */
     @PostMapping("/{id}/share")
     public ResponseEntity<Map<String, Object>> shareProject(
             @RequestHeader("Authorization") String tokenHeader,

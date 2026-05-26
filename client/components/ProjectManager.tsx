@@ -6,36 +6,23 @@ interface ProjectManagerProps {
   onSelectProject: (project: Project) => void;
 }
 
-/**
- * Component to manage dossier directories including creation, deletion,
- * listing, and collaborative sharing with team members.
- */
 export default function ProjectManager({ onSelectProject }: ProjectManagerProps) {
-  // list of requirements projects retrieved from system
   const [projects, setProjects] = useState<Project[]>([]);
-  // indicates whether the project creation card form is visible
   const [showCreateForm, setShowCreateForm] = useState(false);
-  // input field attributes for constructing new projects
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  // holds reference to project targeted for deletion dialog
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   
-  // collaborate/share states
   const [sharingProjectId, setSharingProjectId] = useState<string | null>(null);
   const [shareEmail, setShareEmail] = useState('');
   const [teammates, setTeammates] = useState<any[]>([]);
   
-  // operations/notifications state managers
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem('token');
 
-  /**
-   * Fetches all registered users who can be teammates
-   */
   const fetchTeammates = async () => {
     if (!token) return;
     try {
@@ -47,13 +34,10 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         setTeammates(data);
       }
     } catch {
-      // Slidely ignore
+      setError("Connection failure fetching teammates")
     }
   };
 
-  /**
-   * Fetches the array of software requirements projects/dossiers from the backend API
-   */
   const fetchProjects = async () => {
     if (!token) return;
     try {
@@ -79,9 +63,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
     fetchTeammates();
   }, []);
 
-  /**
-   * Dispatches request to API layer to create a new requirements dossier with basic specifications
-   */
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !token) return;
@@ -104,7 +85,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         setError('');
         setSuccess('Project specified successfully!');
         await fetchProjects();
-        // Give option to open automatically
         onSelectProject(newProj);
       } else {
         const err = await res.json();
@@ -115,17 +95,11 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
     }
   };
 
-  /**
-   * Opens the confirmation dialog modal to perform dangerous delete action
-   */
   const handleDeleteProject = (p: Project, e: React.MouseEvent) => {
     e.stopPropagation();
     setProjectToDelete(p);
   };
 
-  /**
-   * Resolves the delete process by calling the backend to scrap all data linked to the given project
-   */
   const confirmDeleteProject = async () => {
     if (!projectToDelete || !token) return;
     const id = projectToDelete.id;
@@ -150,9 +124,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
     }
   };
 
-  /**
-   * Dispatches email sharing request to enable collaborative specifications in real-time
-   */
   const handleShareProject = async (id: string, e: React.FormEvent) => {
     e.preventDefault();
     if (!shareEmail.trim() || !token) return;
@@ -182,9 +153,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
     }
   };
 
-  /**
-   * Directly shares project with a specific selected teammate from lookup
-   */
   const shareWithDirectEmail = async (id: string, email: string) => {
     if (!email.trim() || !token) return;
 
@@ -216,7 +184,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
   return (
     <div className="space-y-6" id="project-workspace-manager">
       
-      {/* Dynamic Notifications toast alert info banner */}
       {(error || success) && (
         <div className="flex gap-4 items-center">
           {error && (
@@ -233,7 +200,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         </div>
       )}
 
-      {/* Top dashboard directory toolbar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-lg font-serif font-bold text-stone-900 tracking-tight">Your Projects</h2>
@@ -254,7 +220,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         </button>
       </div>
 
-      {/* Slide-out or Drop-down embedded Project instantiation Card form (US5) */}
       {showCreateForm && (
         <form onSubmit={handleCreateProject} className="bg-white p-6 rounded-xl border border-stone-100 shadow-2xs space-y-4">
           <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700 font-sans">Create New Project</h4>
@@ -303,7 +268,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         </form>
       )}
 
-      {/* Grid displaying folders (US4) */}
       {projects.length === 0 ? (
         <div className="bg-white border border-dashed border-stone-200 rounded-2xl p-12 text-center flex flex-col items-center justify-center">
           <FolderClosed className="h-10 w-10 text-stone-350 mb-3" />
@@ -325,14 +289,12 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                 onClick={() => onSelectProject(p)}
                 className="bg-white rounded-xl border border-stone-150 hover:border-ivy-200 p-5 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between group cursor-pointer relative"
               >
-                {/* Folder Icon badge */}
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
                     <div className="bg-ivy-50 text-ivy-600 p-2.5 rounded-lg group-hover:bg-ivy-900 group-hover:text-white transition-all">
                       <FolderClosed className="h-4 w-4" />
                     </div>
                     
-                    {/* Delete action US6 (Only show or validate for owners) */}
                     <button
                       onClick={(e) => handleDeleteProject(p, e)}
                       className="p-1.5 text-ivy-50 hover:bg-rose-600 rounded-lg transition-colors cursor-pointer"
@@ -352,10 +314,8 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                   </div>
                 </div>
  
-                {/* Footer specs - details and invite sharing trigger */}
                 <div className="border-t border-stone-50 mt-4 pt-3 space-y-3">
                   
-                  {/* Stats metadata */}
                   <div className="flex items-center justify-between text-[10px] text-stone-400 font-mono">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3 shrink-0" />
@@ -367,7 +327,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                     </span>
                   </div>
  
-                  {/* Share button or Form US18 (Share project with teammates) */}
                   {isSharingThis ? (
                     <div className="relative mt-2" onClick={(e) => e.stopPropagation()}>
                       <form
@@ -402,7 +361,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                         </button>
                       </form>
 
-                      {/* Dropdown Suggestions */}
                       {shareEmail.trim().length > 0 && (
                         <div className="absolute top-full left-0 right-0 bg-white border border-stone-150 rounded-lg shadow-lg z-50 mt-1 max-h-40 overflow-y-auto font-sans leading-normal">
                           {teammates.filter(t => 
@@ -451,7 +409,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                     </div>
                   ) : (
                     <div className="flex items-center justify-between gap-2 mt-2 pt-1">
-                      {/* Trigger share widget */}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -465,7 +422,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                         <Share2 className="h-3 w-3 shrink-0" />
                       </button>
  
-                      {/* Open dossier button */}
                       <span className="text-[10px] font-bold text-stone-400 group-hover:text-stone-800 flex items-center gap-0.5 transition-colors">
                         <span>Open</span>
                         <LogIn className="h-3.5 w-3.5 shrink-0" />
@@ -480,7 +436,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         </div>
       )}
 
-      {/* Custom safer dialog for deleting project */}
       {projectToDelete && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" onClick={(e) => e.stopPropagation()}>
           <div className="bg-white rounded-xl border border-slate-100 shadow-xl max-w-sm w-full p-5 space-y-4">

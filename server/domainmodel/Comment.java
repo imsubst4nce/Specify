@@ -6,9 +6,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 
-/**
- * Spring JPA Entity representing a collaborative discussion comment.
- */
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -21,7 +18,7 @@ public class Comment {
     private String projectId;
 
     @Column(name = "target_type", nullable = false)
-    private String targetType; // 'usecase' or 'crccard'
+    private String targetType;
 
     @Column(name = "target_id", nullable = false)
     private String targetId;
@@ -32,7 +29,7 @@ public class Comment {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "avatar_url", columnDefinition = "LONGTEXT") // Support Base64 inline avatar strings
+    @Column(name = "avatar_url", columnDefinition = "LONGTEXT")
     private String avatarUrl;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -45,7 +42,6 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

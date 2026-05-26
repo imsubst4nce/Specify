@@ -16,9 +16,6 @@ import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
 
-/**
- * Spring REST Controller managing user registration, secure session logins, and profile revisions.
- */
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -27,9 +24,6 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Handles User Session Sign Up / Account definition (US1)
-     */
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> registerUser(@RequestBody Map<String, String> payload) {
         String name = payload.get("name");
@@ -49,7 +43,6 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        // Standard mock BCrypt representation: simple base64 hash matching client expectation
         String passwordHash = Base64.getEncoder().encodeToString(password.getBytes(StandardCharsets.UTF_8));
         String userId = UUID.randomUUID().toString().substring(0, 9);
         User newUser = new User(userId, name, email, passwordHash, null);
@@ -58,14 +51,11 @@ public class AuthController {
 
         response.put("message", "User registered successfully");
         response.put("user", newUser);
-        response.put("token", userId); // Simple token based on generated userId
+        response.put("token", userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * Handles User Session Logins
-     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginUser(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
@@ -98,9 +88,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Retrieves currently authenticated session context
-     */
     @GetMapping("/me")
     public ResponseEntity<User> getMe(@RequestHeader("Authorization") String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
@@ -112,9 +99,6 @@ public class AuthController {
                    .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    /**
-     * Retrieves a list of all registered users as potential teammates (excluding current user)
-     */
     @GetMapping("/users")
     public ResponseEntity<List<Map<String, String>>> listAllUsers(@RequestHeader("Authorization") String tokenHeader) {
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
@@ -140,9 +124,6 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
-    /**
-     * Handles User Profile revisions (US2)
-     */
     @PutMapping("/profile")
     public ResponseEntity<Map<String, Object>> updateProfile(
             @RequestHeader("Authorization") String tokenHeader,

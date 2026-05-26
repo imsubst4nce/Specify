@@ -1,14 +1,8 @@
 import { BookOpen, CheckCircle, AlertTriangle, Shield, Layers, HelpCircle } from 'lucide-react';
 
-
-/**
- * Component displaying simplified guidelines, best practices for beginners,
- * and explanation of how Specify compiles diagrams under the hood.
- */
 export default function HelpCenter() {
   return (
     <div className="bg-white rounded-xl border border-stone-150 shadow-sm overflow-hidden" id="help-center-root">
-      {/* Brand Header */}
       <div className="bg-gradient-to-r from-wood-900 via-ivy-850 to-wood-950 p-6 text-white border-b border-wood-850">
         <div className="flex items-center gap-3">
           <BookOpen className="h-6 w-6 text-ivy-200" id="help-title-icon" />
@@ -23,14 +17,12 @@ export default function HelpCenter() {
 
 
       <div className="p-6 space-y-6">
-        {/* Do's and Don'ts Grid */}
         <div>
           <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider border-b border-stone-150 pb-2 mb-4 flex items-center gap-2">
             <Shield className="h-4 w-4 text-ivy-600" />
             Basic Design Guidelines
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Classes Column */}
             <div className="space-y-3 bg-stone-50/50 p-4 rounded-lg border border-stone-150/50">
               <h4 className="font-bold text-stone-800 text-xs border-b border-stone-150 pb-1 uppercase tracking-wide">
                 Classes
@@ -51,8 +43,6 @@ export default function HelpCenter() {
               </ul>
             </div>
 
-
-            {/* Methods Column */}
             <div className="space-y-3 bg-stone-50/50 p-4 rounded-lg border border-stone-150/50">
               <h4 className="font-bold text-stone-800 text-xs border-b border-stone-150 pb-1 uppercase tracking-wide">
                 Methods
@@ -69,8 +59,6 @@ export default function HelpCenter() {
               </ul>
             </div>
 
-
-            {/* Fields Column */}
             <div className="space-y-3 bg-stone-50/50 p-4 rounded-lg border border-stone-150/50">
               <h4 className="font-bold text-stone-800 text-xs border-b border-stone-150 pb-1 uppercase tracking-wide">
                 Fields
@@ -90,9 +78,7 @@ export default function HelpCenter() {
         </div>
 
 
-        {/* Structural Specs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-          {/* Use Cases block */}
           <div className="border border-stone-150 rounded-lg p-5">
             <h4 className="font-bold text-stone-900 text-xs uppercase tracking-wide flex items-center gap-2 mb-3">
               <CheckCircle className="h-4 w-4 text-ivy-600" />
@@ -109,8 +95,6 @@ export default function HelpCenter() {
             </div>
           </div>
 
-
-          {/* CRC Cards block */}
           <div className="border border-stone-150 rounded-lg p-5">
             <h4 className="font-bold text-stone-900 text-xs uppercase tracking-wide flex items-center gap-2 mb-3">
               <CheckCircle className="h-4 w-4 text-ivy-600" />
@@ -128,8 +112,6 @@ export default function HelpCenter() {
           </div>
         </div>
 
-
-        {/* Architecture Spotlight */}
         <div className="bg-stone-50/50 rounded-xl p-5 border border-stone-150">
           <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider mb-2 flex items-center gap-2">
             <Layers className="h-4 w-4 text-ivy-600" />
@@ -139,7 +121,6 @@ export default function HelpCenter() {
             Specify features a built-in generator that converts created use cases and CRC cards into scripts for supported diagram tools.
           </p>
 
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white p-3.5 rounded-lg border border-stone-150/60 shadow-3xs">
               <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Tool Selection</span>
@@ -148,7 +129,6 @@ export default function HelpCenter() {
                 Support for PlantUML and Nomnoml.
               </p>
             </div>
-
 
             <div className="bg-white p-3.5 rounded-lg border border-stone-150/60 shadow-3xs">
               <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Script Generator</span>

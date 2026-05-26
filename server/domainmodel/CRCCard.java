@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Spring JPA Entity representing a Class Responsibility Collaborator (CRC) index card.
- */
 @Entity
 @Table(name = "crc_cards")
 public class CRCCard {
@@ -28,7 +25,7 @@ public class CRCCard {
     private String projectId;
 
     @Column(name = "class_name", nullable = false)
-    private String className; // PascalCase noun phrasing
+    private String className;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -41,12 +38,12 @@ public class CRCCard {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "crc_card_collaborators", joinColumns = @JoinColumn(name = "crc_card_id"))
     @Column(name = "collaborator_name")
-    private List<String> collaborators = new ArrayList<>(); // Linked classes names
+    private List<String> collaborators = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "crc_card_linked_usecases", joinColumns = @JoinColumn(name = "crc_card_id"))
     @Column(name = "usecase_id")
-    private List<String> linkedUseCaseIds = new ArrayList<>(); // Linked Behavioral usecases
+    private List<String> linkedUseCaseIds = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -55,7 +52,6 @@ public class CRCCard {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
