@@ -120,7 +120,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="h-4 w-4 text-indigo-500" />
         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-          Collaboration Comments on "{targetTitle}"
+          Comments on "{targetTitle}"
         </h4>
         <span className="text-[10px] bg-ivy-700 text-ivy-100 px-1.5 py-0.5 rounded-full font-bold">
           {comments.length}
@@ -188,7 +188,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
           type="text"
           value={text}
           onChange={e => setText(e.target.value)}
-          placeholder={`Add a comment on this ${targetType === 'usecase' ? 'use case' : 'CRC card'}...`}
+          placeholder={`Add a comment...`}
           className="w-full text-xs bg-white text-slate-800 pl-3 pr-10 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
           disabled={loading}
         />

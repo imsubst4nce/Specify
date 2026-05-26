@@ -123,11 +123,17 @@ public class UseCaseController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if (!useCaseRepository.existsById(id)) {
+        Optional<UseCase> opt = useCaseRepository.findById(id);
+        if (opt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        useCaseRepository.deleteById(id);
+        UseCase uc = opt.get();
+        uc.getActors().clear();
+        uc.getMainFlow().clear();
+        useCaseRepository.saveAndFlush(uc);
+
+        useCaseRepository.delete(uc);
 
         Map<String, String> res = new HashMap<>();
         res.put("message", "Use case deleted successfully");

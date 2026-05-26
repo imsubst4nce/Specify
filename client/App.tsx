@@ -28,22 +28,14 @@ export default function App() {
   // Dashboard view toggle if user is on the main landing page (projects vs general compliance guidelines)
   const [homeTab, setHomeTab] = useState<'projects' | 'guidelines'>('projects');
 
-  // Dark Mode Configuration State (Defaults to true/dark mode!)
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const saved = localStorage.getItem('theme');
-    return saved ? saved === 'dark' : true;
-  });
+  // Dark Mode Configuration (Locked to Dark Theme - UI theme defaults permanently to dark)
+  const isDarkMode = true;
 
-  // Effect to synchronize the HTML document root element with the theme preference
+  // Effect to synchronize the HTML document root element to always ensure dark theme
   useEffect(() => {
-    const root = document.documentElement;
-    if (isDarkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
 
   // indicates if application is checking for saved authentication state
   const [loading, setLoading] = useState(true);
@@ -113,7 +105,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className={`min-h-screen ${isDarkMode ? 'dark bg-wood-955 text-stone-200' : 'bg-wood-100 text-stone-800'} flex flex-col justify-center items-center font-sans`}>
+      <div className="min-h-screen dark bg-wood-955 text-stone-200 flex flex-col justify-center items-center font-sans">
         <div className="animate-spin h-6 w-6 border-2 border-ivy-600 border-t-transparent rounded-full mb-2 font-semibold"></div>
         <p className="text-xs text-stone-400 font-semibold font-mono">Preparing Specify Planning Board...</p>
       </div>
@@ -123,34 +115,23 @@ export default function App() {
   // Not Authenticated -> Show beautiful auth portals (US1)
   if (!token || !user) {
     return (
-      <div className={`min-h-screen relative transition-colors duration-300 ${isDarkMode ? 'dark bg-wood-955 text-stone-200' : 'bg-wood-100 text-stone-800'} flex flex-col justify-between py-12 px-6 font-sans`}>
+      <div className="min-h-screen relative transition-colors duration-300 dark bg-wood-955 text-stone-200 flex flex-col justify-between py-12 px-6 font-sans">
         {/* Top-left Minimal Branding Logo */}
         <div className="absolute top-4 left-4 z-50 flex items-center gap-3.5 select-none animate-fade-in">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-ivy-500 to-indigo-600 text-sm font-extrabold text-white tracking-widest shadow-2xs">
             S
           </div>
           <div>
-            <span className="text-sm font-serif font-black tracking-tight text-stone-900 dark:text-white block leading-none">Specify</span>
-            <span className="text-[9px] text-stone-500 dark:text-stone-400 mt-1.5 font-mono uppercase tracking-widest block leading-none">Design & Analysis</span>
+            <span className="text-sm font-serif font-black tracking-tight text-white block leading-none">Specify</span>
+            <span className="text-[9px] text-stone-400 mt-1.5 font-mono uppercase tracking-widest block leading-none">Software Design & Analysis Workspace</span>
           </div>
-        </div>
-
-        {/* Floating Theme Switcher for logged out users */}
-        <div className="absolute top-4 right-4 z-50">
-          <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="p-2.5 rounded-xl bg-white dark:bg-wood-900 border border-stone-200 dark:border-wood-800 text-stone-600 dark:text-stone-300 hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer flex items-center justify-center select-none"
-            title="Toggle theme selection"
-          >
-            {isDarkMode ? <Sun className="h-4 w-4 text-amber-500" /> : <Moon className="h-4 w-4 text-indigo-600" />}
-          </button>
         </div>
 
         <div className="flex-grow flex items-center justify-center">
           <AuthPage onAuthSuccess={handleAuthSuccess} />
         </div>
-        <div className="text-center text-[10px] text-stone-400 font-medium max-w-sm mx-auto mt-6 font-mono">
-          Specify Planning Space • 2026
+        <div className="text-center text-[10px] text-stone-400 font-medium max-w-sm mx-auto my-auto font-mono">
+          Specify • 2026
         </div>
       </div>
     );
@@ -158,15 +139,13 @@ export default function App() {
 
   // Authenticated Workspace
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-wood-955 text-stone-200' : 'bg-wood-100 text-stone-800'} flex flex-col font-sans`} id="app-workspace-root">
+    <div className="min-h-screen transition-colors duration-300 dark bg-wood-955 text-stone-200 flex flex-col font-sans" id="app-workspace-root">
       
       {/* Top Main Navbar */}
       <Navigation
         userName={user.name}
         userEmail={user.email}
         avatarUrl={user.avatarUrl}
-        isDarkMode={isDarkMode}
-        onThemeToggle={() => setIsDarkMode(!isDarkMode)}
         onLogout={handleLogout}
         onEditProfile={() => setIsEditingProfile(true)}
         onHomeClick={() => {
@@ -212,7 +191,7 @@ export default function App() {
                     src={user.avatarUrl} 
                     alt={user.name} 
                     referrerPolicy="no-referrer"
-                    className="h-16 w-16 rounded-full object-cover border-2 border-ivy-505/30 shadow-sm"
+                    className="h-16 w-16 rounded-full object-cover border-2 border-ivy-600 shadow-sm"
                   />
                 ) : (
                   <div className="h-16 w-16 rounded-full bg-ivy-600/10 border border-ivy-505/20 text-ivy-700 font-extrabold flex items-center justify-center text-3xl uppercase shadow-xs">
@@ -245,7 +224,7 @@ export default function App() {
             {/* Left Column: Projects lists & Create widget */}
             <div className="xl:col-span-8 space-y-5">
               {/* Home toggleable view tabs for quick layout navigation */}
-              <div className="pb-1 flex justify-between items-center bg-white p-3 rounded-xl border border-stone-150 shadow-3xs">
+              <div className="pb-2 flex justify-between items-center bg-white p-2 rounded-xl border border-stone-150 shadow-3xs">
                 <div className="bg-stone-100 p-0.5 rounded-lg flex text-xs font-semibold">
                   <button
                     onClick={() => setHomeTab('projects')}
@@ -265,13 +244,9 @@ export default function App() {
                         : 'text-stone-600 hover:text-stone-900'
                     }`}
                   >
-                    Guidelines & Simple Help
+                    Guidelines & Quick Start
                   </button>
                 </div>
-                
-                <span className="hidden sm:inline-block text-xs text-stone-400 font-mono">
-                  Active Area: Specify Core
-                </span>
               </div>
 
               {homeTab === 'projects' ? (
@@ -300,37 +275,27 @@ export default function App() {
                       <div className="flex gap-2.5 items-start">
                         <span className="h-5 w-5 rounded-full bg-ivy-50 text-ivy-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
                         <div>
-                          <h5 className="text-xs font-bold text-stone-800 dark:text-white">Formulate Use Cases</h5>
-                          <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal mt-0.5">Define human/system actor deeds and responses.</p>
+                          <h5 className="text-xs font-bold text-stone-800 dark:text-white">Create Use Cases</h5>
+                          <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal mt-0.5">Define actors and system behavior.</p>
                         </div>
                       </div>
 
                       <div className="flex gap-2.5 items-start">
                         <span className="h-5 w-5 rounded-full bg-ivy-50 text-ivy-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
                         <div>
-                          <h5 className="text-xs font-bold text-stone-800 dark:text-white">Draft CRC Cards</h5>
-                          <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal mt-0.5">Define components, classes, and responsibilities.</p>
+                          <h5 className="text-xs font-bold text-stone-800 dark:text-white">Create CRC Cards</h5>
+                          <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal mt-0.5">Define classes, responsibilities, and collaborations.</p>
                         </div>
                       </div>
 
                       <div className="flex gap-2.5 items-start">
                         <span className="h-5 w-5 rounded-full bg-ivy-50 text-ivy-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
                         <div>
-                          <h5 className="text-xs font-bold text-stone-800 dark:text-white">Automatic Diagrams</h5>
-                          <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal mt-0.5">Connect requirements into clean PlantUML or Nomnoml scripts.</p>
+                          <h5 className="text-xs font-bold text-stone-800 dark:text-white">Generate Diagrams</h5>
+                          <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal mt-0.5">Produce PlantUML or Nomnoml scripts.</p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Small architectural details card */}
-                  <div className="bg-white p-5 rounded-xl border border-stone-150 shadow-2xs space-y-3">
-                    <h4 className="text-xs font-bold text-stone-800 uppercase tracking-widest flex items-center gap-1.5 dark:text-white">
-                      <Layers className="h-4 w-4 text-ivy-600" /> Dynamic Layouts
-                    </h4>
-                    <p className="text-xs text-stone-500 dark:text-stone-400 leading-normal">
-                      Specifies and links your workflows to class structures for easy copying and sharing.
-                    </p>
                   </div>
                 </>
               )}
@@ -432,8 +397,8 @@ export default function App() {
 
       {/* Unified footer credits info banner */}
       <footer className="bg-white border-t border-slate-150 py-5 text-center text-[10px] text-slate-400 font-mono mt-12 shrink-0">
-        <div>Specify • Software Requirements & Analysis Workspace</div>
-        <div className="mt-1">Copyrights - 2026</div>
+        <div>Specify • Software Design & Analysis Workspace</div>
+        <div className="mt-1">Copyrights • 2026</div>
       </footer>
     </div>
   );

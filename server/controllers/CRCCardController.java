@@ -124,11 +124,18 @@ public class CRCCardController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if (!crcCardRepository.existsById(id)) {
+        Optional<CRCCard> opt = crcCardRepository.findById(id);
+        if (opt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        crcCardRepository.deleteById(id);
+        CRCCard card = opt.get();
+        card.getResponsibilities().clear();
+        card.getCollaborators().clear();
+        card.getLinkedUseCaseIds().clear();
+        crcCardRepository.saveAndFlush(card);
+
+        crcCardRepository.delete(card);
 
         Map<String, String> res = new HashMap<>();
         res.put("message", "CRC Card deleted successfully");

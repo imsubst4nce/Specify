@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldAlert, Lock, Mail, User as UserIcon, CheckCircle2, ArrowRight, Upload, Trash2 } from 'lucide-react';
+import { ShieldAlert, Lock, Mail, User as UserIcon, CheckCircle2, ArrowRight, Upload, Trash2, FileIcon } from 'lucide-react';
 
 interface AuthPageProps {
   onAuthSuccess?: (user: { id: string; name: string; email: string; avatarUrl?: string }, token: string) => void;
@@ -8,34 +8,25 @@ interface AuthPageProps {
   onProfileUpdateCancel?: () => void;
 }
 
-/**
- * AuthHeader Modular Component View
- */
 interface AuthHeaderProps {
   editMode: boolean;
 }
 
 function AuthHeader({ editMode }: AuthHeaderProps) {
   return (
-    <div className="bg-gradient-to-br from-wood-900 via-ivy-900 to-wood-950 p-6 text-white text-center border-b border-wood-850">
-      <div className="h-10 w-10 rounded-xl bg-ivy-700/30 text-ivy-200 border border-ivy-500/20 flex items-center justify-center mx-auto mb-3">
-        <Lock className="h-5 w-5" />
-      </div>
+    <div className="bg-gradient-to-br from-wood-900 via-ivy-900 to-wood-950 p-6 text-white text-center">
       <h2 className="text-lg font-serif font-bold tracking-tight">
-        {editMode ? 'Update Account Settings' : 'Join Specify'}
+        {editMode ? 'Account Settings' : 'Join Specify'}
       </h2>
       <p className="text-xs text-stone-350 mt-1.5 font-medium">
         {editMode
-          ? 'Verify your password to save changes'
-          : 'Enter account details to access your workspace'}
+          ? 'Edit your account information'
+          : 'Login or Sign Up to access your workspace'}
       </p>
     </div>
   );
 }
 
-/**
- * AuthTabs Modular Navigation Component View
- */
 interface AuthTabsProps {
   activeTab: 'login' | 'register';
   onTabChange: (tab: 'login' | 'register') => void;
@@ -43,25 +34,25 @@ interface AuthTabsProps {
 
 function AuthTabs({ activeTab, onTabChange }: AuthTabsProps) {
   return (
-    <div className="flex border-b border-stone-150 text-xs text-stone-500 font-bold bg-stone-50/50">
+    <div className="flex text-xs text-stone-500 font-bold bg-stone-50/50">
       <button
         onClick={() => onTabChange('login')}
         type="button"
-        className={`flex-1 py-3 border-b-2 text-center select-none cursor-pointer transition-colors ${
+        className={`flex-1 py-3 text-center select-none cursor-pointer transition-colors ${
           activeTab === 'login'
-            ? 'border-ivy-700 text-stone-900 font-extrabold bg-white dark:bg-wood-800 dark:text-stone-100'
-            : 'border-transparent hover:text-stone-700 hover:bg-stone-50/50'
+            ? 'font-bold bg-white'
+            : 'border-transparent hover:text-ivy-50 hover:bg-ivy-600'
         }`}
       >
-        Log In
+        Login
       </button>
       <button
         onClick={() => onTabChange('register')}
         type="button"
-        className={`flex-1 py-3 border-b-2 text-center select-none cursor-pointer transition-colors ${
+        className={`flex-1 py-3 text-center select-none cursor-pointer transition-colors ${
           activeTab === 'register'
-            ? 'border-ivy-700 text-stone-900 font-extrabold bg-white dark:bg-wood-800 dark:text-stone-100'
-            : 'border-transparent hover:text-stone-700 hover:bg-stone-50/50'
+            ? 'font-bold bg-white'
+            : 'border-transparent hover:text-ivy-50 hover:bg-ivy-600'
         }`}
       >
         Sign Up
@@ -70,9 +61,7 @@ function AuthTabs({ activeTab, onTabChange }: AuthTabsProps) {
   );
 }
 
-/**
- * InputField Reusable Input Column View
- */
+// Custom input field
 interface InputFieldProps {
   label: string;
   type: string;
@@ -106,9 +95,7 @@ function InputField({ label, type, value, onChange, required = false, icon, plac
   );
 }
 
-/**
- * Main AuthPage Component
- */
+// Main AuthPage component
 export default function AuthPage({
   onAuthSuccess,
   editMode = false,
@@ -117,14 +104,14 @@ export default function AuthPage({
 }: AuthPageProps) {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
 
-  // Input States
+  // Input field states
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
 
-  // Drag and Drop State
+  // Drag-and-Drop state
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -133,7 +120,7 @@ export default function AuthPage({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Handle Tab Switch (Login / Register Reset fields)
+  // Handle tab switch (must reset fields everytime)
   const handleTabChange = (tab: 'login' | 'register') => {
     setActiveTab(tab);
     setName('');
@@ -143,7 +130,6 @@ export default function AuthPage({
     setSuccess('');
   };
 
-  // Drag handlers
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -156,12 +142,12 @@ export default function AuthPage({
 
   const processFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      setError('Please provide a valid image file format (PNG, JPG, WEBP)');
+      setError('Please provide a valid image file format (e.g PNG, JPG, WEBP)');
       return;
     }
     
-    // Check if the file size is reasonable (up to 2MB)
-    if (file.size > 1 * 1024 * 1024) {
+    // Check if the file size is not (up to 2MB)
+    if (file.size > 2 * 1024 * 1024) {
       setError('Image file is too large. Please upload an image under 2MB.');
       return;
     }
@@ -209,7 +195,7 @@ export default function AuthPage({
     }
   };
 
-  // Synchronize on editMode activation
+  // Synchronize in editMode
   useEffect(() => {
     if (editMode && currentUser) {
       setName(currentUser.name);
@@ -226,12 +212,12 @@ export default function AuthPage({
     e.preventDefault();
 
     if (!email || (!editMode && !password) || (!editMode && activeTab === 'register' && !name)) {
-      setError('Please provide all required core fields');
+      setError('Please provide all required fields');
       return;
     }
 
     if (editMode && !currentPassword) {
-      setError('Your current password is required to save changes safely');
+      setError('Your current password is required to save changes');
       return;
     }
 
@@ -253,14 +239,14 @@ export default function AuthPage({
 
         if (res.ok) {
           const data = await res.json();
-          setSuccess('Profile specifications updated successfully!');
+          setSuccess('Profile details updated successfully!');
           setCurrentPassword('');
           if (onAuthSuccess) {
             onAuthSuccess(data.user, token || '');
           }
         } else {
           const err = await res.json();
-          setError(err.error || 'Failed to update profile specifications');
+          setError(err.error || 'Failed to update profile details');
         }
       } else {
         const endpoint = activeTab === 'login' ? 'login' : 'register';
@@ -280,8 +266,8 @@ export default function AuthPage({
               onAuthSuccess(data.user, data.token);
             }
           } else {
-            // Successful Registration -> Redirect to login tab instead of automatic authentication
-            setSuccess('Account created successfully! Please log in below to access your secure workspace.');
+            // Successful registration -> Redirects to login tab instead of automatic authentication for extra security
+            setSuccess('Account created successfully! Please login to access your workspace.');
             setPassword('');
             setActiveTab('login');
           }
@@ -291,7 +277,7 @@ export default function AuthPage({
         }
       }
     } catch {
-      setError('Connection failure communicating with authentication servers');
+      setError('Communication with authentication servers failed');
     } finally {
       setLoading(false);
     }
@@ -299,12 +285,12 @@ export default function AuthPage({
 
   return (
     <div className={`mx-auto w-full ${editMode ? 'max-w-md' : 'max-w-sm mt-12'}`} id="auth-portal-root">
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-md overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-md overflow-hidden">
         
-        {/* Dynamic header fragment */}
+        {/* AuthHeader */}
         <AuthHeader editMode={editMode} />
 
-        {/* Dynamic Tab picker fragment (only for Login/Signup) */}
+        {/* AuthTabs */}
         {!editMode && (
           <AuthTabs
             activeTab={activeTab}
@@ -312,15 +298,17 @@ export default function AuthPage({
           />
         )}
 
-        {/* Dynamic Form input fields */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          
+          {/* On error, will display error message */}
           {error && (
             <div className="bg-rose-50 border border-rose-100 p-2.5 rounded-lg flex items-start gap-2 text-rose-600 text-[11px]">
               <ShieldAlert className="h-4 w-4 shrink-0 mt-0.5 text-rose-500" />
               <span>{error}</span>
             </div>
           )}
-
+          
+          {/* On success, will display success message */}
           {success && (
             <div className="bg-emerald-50 border border-emerald-100 p-2.5 rounded-lg flex items-start gap-2 text-emerald-800 text-[11px]">
               <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-600" />
@@ -329,7 +317,7 @@ export default function AuthPage({
           )}
 
           <div className="space-y-3.5">
-            {/* Custom Avatar Upload Module (DND & Manual) */}
+            {/* Avatar upload */}
             {editMode && (
               <div className="space-y-2" id="avatar-dropzone-row">
                 <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">
@@ -381,7 +369,7 @@ export default function AuthPage({
                       accept="image/*"
                       onChange={handleFileChange}
                       className="hidden"
-                      title="Upload profile avatar image"
+                      title="Upload profile avatar"
                     />
                     <Upload className={`h-4 w-4 mb-1 transition-colors ${dragActive ? 'text-ivy-600' : 'text-stone-400'}`} />
                     <span className="text-xs font-bold text-stone-700 leading-tight">
@@ -398,7 +386,7 @@ export default function AuthPage({
               </div>
             )}
 
-            {/* Optional Name (only register or edit mode) */}
+            {/* Optional name field (only in register and edit view) */}
             {(editMode || activeTab === 'register') && (
               <InputField
                 label="Full Name"
@@ -406,23 +394,23 @@ export default function AuthPage({
                 value={name}
                 onChange={setName}
                 required={true}
-                placeholder="e.g., Alice Vance"
+                placeholder="John Doe"
                 icon={<UserIcon className="h-3.5 w-3.5" />}
               />
             )}
 
-            {/* Email Address */}
+            {/* Email address */}
             <InputField
               label="Email Address"
               type="email"
               value={email}
               onChange={setEmail}
               required={true}
-              placeholder="e.g., email@example.com"
+              placeholder="email@example.com"
               icon={<Mail className="h-3.5 w-3.5" />}
             />
 
-            {/* Current Password - REQUIRED in editMode to proceed */}
+            {/* Current password - REQUIRED in editMode to save changes */}
             {editMode && (
               <InputField
                 label="Current Password"
@@ -435,7 +423,7 @@ export default function AuthPage({
               />
             )}
 
-            {/* Password / New password Option */}
+            {/* Password / New password option */}
             <InputField
               label={editMode ? 'New Password (Optional)' : 'Password'}
               type="password"
@@ -470,7 +458,7 @@ export default function AuthPage({
               onClick={onProfileUpdateCancel}
               className="w-full bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-lg py-2 text-xs font-semibold transition-all cursor-pointer block text-center mt-2"
             >
-              Cancel Profile Edits
+              Cancel
             </button>
           )}
         </form>

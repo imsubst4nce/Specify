@@ -474,7 +474,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 {/* Right side: Steps Flow */}
                 <div>
                   <h5 className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1.5 mb-1.5">
-                    <ListOrdered className="h-3.5 w-3.5 text-ivy-600" /> Main Flow Event Pipeline
+                    <ListOrdered className="h-3.5 w-3.5 text-ivy-600" /> Main Flow
                   </h5>
                   {selectedUC.mainFlow && selectedUC.mainFlow.length > 0 ? (
                     <div className="space-y-2">

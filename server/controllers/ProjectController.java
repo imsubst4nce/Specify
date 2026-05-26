@@ -135,7 +135,9 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
         }
 
-        projectRepository.deleteById(id);
+        project.getSharedWith().clear();
+        projectRepository.saveAndFlush(project);
+        projectRepository.delete(project);
 
         Map<String, String> res = new HashMap<>();
         res.put("message", "Project deleted successfully");

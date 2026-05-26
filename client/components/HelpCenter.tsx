@@ -1,5 +1,6 @@
 import { BookOpen, CheckCircle, AlertTriangle, Shield, Layers, HelpCircle } from 'lucide-react';
 
+
 /**
  * Component displaying simplified guidelines, best practices for beginners,
  * and explanation of how Specify compiles diagrams under the hood.
@@ -12,78 +13,82 @@ export default function HelpCenter() {
         <div className="flex items-center gap-3">
           <BookOpen className="h-6 w-6 text-ivy-200" id="help-title-icon" />
           <div>
-            <h2 className="text-lg font-serif font-bold tracking-tight">Specify Guidelines & Quick Start</h2>
+            <h2 className="text-lg font-serif font-bold tracking-tight">Guidelines & Quick Start</h2>
             <p className="text-xs text-stone-350 mt-1">
-              A simple workspace to write down your use cases, design cards, and generate automatic visual diagrams.
+              Write use cases, create CRC cards, and generate diagram scripts.
             </p>
           </div>
         </div>
       </div>
+
 
       <div className="p-6 space-y-6">
         {/* Do's and Don'ts Grid */}
         <div>
           <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider border-b border-stone-150 pb-2 mb-4 flex items-center gap-2">
             <Shield className="h-4 w-4 text-ivy-600" />
-            Best Practices for Clean Software Design
+            Basic Design Guidelines
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Classes Column */}
             <div className="space-y-3 bg-stone-50/50 p-4 rounded-lg border border-stone-150/50">
               <h4 className="font-bold text-stone-800 text-xs border-b border-stone-150 pb-1 uppercase tracking-wide">
-                Designing Objects & Classes
+                Classes
               </h4>
               <ul className="space-y-2 text-xs text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                  <span><strong>Keep it simple:</strong> Each component class should do only one main job.</span>
+                  <span><strong>One responsibility:</strong> Each class should have one main role.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                  <span><strong>Descriptive Names:</strong> Use clear nouns (like <code>UserAccount</code> or <code>ShoppingCart</code>).</span>
+                  <span><strong>Clear names:</strong> Use descriptive nouns such as <code>User</code> or <code>Project</code>.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <AlertTriangle className="h-3.5 w-3.5 text-amber-700 mt-0.5 shrink-0" />
-                  <span><strong>Hide the details:</strong> Keep raw data private inside the object to avoid accidental edits.</span>
+                  <span><strong>Keep data private:</strong> Do not expose internal data directly.</span>
                 </li>
               </ul>
             </div>
+
 
             {/* Methods Column */}
             <div className="space-y-3 bg-stone-50/50 p-4 rounded-lg border border-stone-150/50">
               <h4 className="font-bold text-stone-800 text-xs border-b border-stone-150 pb-1 uppercase tracking-wide">
-                Defining Actions & Methods
+                Methods
               </h4>
               <ul className="space-y-2 text-xs text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                  <span><strong>One Task:</strong> Keep actions small and focused on executing a single specific task.</span>
+                  <span><strong>Keep them small:</strong> A method should do one thing.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                  <span><strong>Action Words:</strong> Represent work using action verbs (like <code>saveFile</code> or <code>printChart</code>).</span>
+                  <span><strong>Use verbs:</strong> Name methods with action words such as <code>saveProject</code> or <code>generateDiagram</code>.</span>
                 </li>
               </ul>
             </div>
 
+
             {/* Fields Column */}
             <div className="space-y-3 bg-stone-50/50 p-4 rounded-lg border border-stone-150/50">
               <h4 className="font-bold text-stone-800 text-xs border-b border-stone-150 pb-1 uppercase tracking-wide">
-                Specifying Data Variables
+                Fields
               </h4>
               <ul className="space-y-2 text-xs text-stone-600">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                  <span><strong>Keep them safe:</strong> Restrict direct access to variables and use access points instead.</span>
+                  <span><strong>Keep them private:</strong> Limit direct access to fields.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-3.5 w-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                  <span><strong>Simple Labels:</strong> State attributes as plain, humble words (like <code>userName</code> or <code>price</code>).</span>
+                  <span><strong>Use clear names:</strong> Choose simple names such as <code>name</code> or <code>email</code>.</span>
                 </li>
               </ul>
             </div>
           </div>
         </div>
+
 
         {/* Structural Specs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
@@ -91,81 +96,75 @@ export default function HelpCenter() {
           <div className="border border-stone-150 rounded-lg p-5">
             <h4 className="font-bold text-stone-900 text-xs uppercase tracking-wide flex items-center gap-2 mb-3">
               <CheckCircle className="h-4 w-4 text-ivy-600" />
-              1. Writing Use Cases
+              1. Use Cases
             </h4>
             <p className="text-xs text-stone-600 mb-3 leading-relaxed">
-              Define what your portal needs to do by specifying step-by-step stories of human and system interactions. Every flow lists:
+              Use cases describe how users interact with the system. Each use case includes:
             </p>
             <div className="space-y-2 text-xs text-stone-600 pl-2 border-l-2 border-stone-200">
-              <p>• <strong>Actors:</strong> The people or external machines interacting with your system.</p>
-              <p>• <strong>Preconditions:</strong> What must already be true or prepared before this action begins.</p>
-              <p>• <strong>Main Flow:</strong> The typical, successful sequence of user and system reactions step-by-step.</p>
-              <p>• <strong>Postconditions:</strong> The final state or outcome the system is left in when done.</p>
+              <p>• <strong>Actors:</strong> The users or external systems involved.</p>
+              <p>• <strong>Preconditions:</strong> What must be true before the use case starts.</p>
+              <p>• <strong>Main Flow:</strong> The normal sequence of steps.</p>
+              <p>• <strong>Postconditions:</strong> The final result after completion.</p>
             </div>
           </div>
+
 
           {/* CRC Cards block */}
           <div className="border border-stone-150 rounded-lg p-5">
             <h4 className="font-bold text-stone-900 text-xs uppercase tracking-wide flex items-center gap-2 mb-3">
               <CheckCircle className="h-4 w-4 text-ivy-600" />
-              2. Designing Class Cards (CRC)
+              2. CRC Cards
             </h4>
             <p className="text-xs text-stone-600 mb-3 leading-relaxed">
-              Organize your software structure using CRC (Class, Responsibility, Collaborator) cards. This bridges your simple descriptions with practical code design:
+              CRC cards help you describe the structure of the system.
             </p>
             <div className="space-y-2 text-xs text-stone-600 pl-2 border-l-2 border-stone-200">
-              <p>• <strong>Responsibilities:</strong> The core jobs and rules that this card or component class handles.</p>
-              <p>• <strong>Collaborators:</strong> Other components that this card must work with to complete its tasks.</p>
-              <p>• <strong>Work Linkages:</strong> Link each card directly to specific Use Cases to prove that your structure works.</p>
+              <p>• <strong>Class:</strong> The name of the class.</p>
+              <p>• <strong>Responsibilities:</strong> What the class does.</p>
+              <p>• <strong>Collaborators:</strong> Other classes it works with.</p>
+              <p>• <strong>Use Case Links:</strong> The use cases supported by the class.</p>
             </div>
           </div>
         </div>
+
 
         {/* Architecture Spotlight */}
         <div className="bg-stone-50/50 rounded-xl p-5 border border-stone-150">
           <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider mb-2 flex items-center gap-2">
             <Layers className="h-4 w-4 text-ivy-600" />
-            How the Automatic Diagram Generator Works
+            Diagram Generation
           </h3>
           <p className="text-xs text-stone-600 leading-relaxed mb-4">
-            Specify is built using clean and modular coding structures to guarantee that when you link your Use Cases and CRC Cards together, they translate smoothly into live scripts:
+            Specify features a built-in generator that converts created use cases and CRC cards into scripts for supported diagram tools.
           </p>
+
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white p-3.5 rounded-lg border border-stone-150/60 shadow-3xs">
-              <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Component Lookup</span>
-              <h5 className="font-bold text-stone-800 text-xs mb-1">Target Generators</h5>
+              <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Tool Selection</span>
+              <h5 className="font-bold text-stone-800 text-xs mb-1">Diagram Tool</h5>
               <p className="text-xs text-stone-500 leading-normal">
-                Sets up the design layout depending on whether you choose PlantUML or Nomnoml.
+                Support for PlantUML and Nomnoml.
+              </p>
+            </div>
+
+
+            <div className="bg-white p-3.5 rounded-lg border border-stone-150/60 shadow-3xs">
+              <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Script Generator</span>
+              <h5 className="font-bold text-stone-800 text-xs mb-1">Script Building Steps</h5>
+              <p className="text-xs text-stone-500 leading-normal">
+                Builds the script step by step, including headers, elements, relations, and footer.
               </p>
             </div>
 
             <div className="bg-white p-3.5 rounded-lg border border-stone-150/60 shadow-3xs">
-              <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Step-by-Step Build</span>
-              <h5 className="font-bold text-stone-800 text-xs mb-1">Pipeline Pipeline</h5>
+              <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Data Integrity</span>
+              <h5 className="font-bold text-stone-800 text-xs mb-1">Output Format</h5>
               <p className="text-xs text-stone-500 leading-normal">
-                Assembles scripts in a clean sequence, building headers, actors, links, and footers.
+                Generates the script in the selected format without changing the input data.
               </p>
             </div>
-
-            <div className="bg-white p-3.5 rounded-lg border border-stone-150/60 shadow-3xs">
-              <span className="text-xs font-bold text-ivy-600 uppercase tracking-widest block mb-1">Flexible Outlines</span>
-              <h5 className="font-bold text-stone-800 text-xs mb-1">Format Styling</h5>
-              <p className="text-xs text-stone-500 leading-normal">
-                Bundles specific styles so you can switch layouts safely without losing any data.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Instructions footer widget */}
-        <div className="bg-ivy-50 p-4 rounded-lg flex items-start gap-3 border border-ivy-100">
-          <HelpCircle className="h-5 w-5 text-ivy-600 shrink-0 mt-0.5" id="help-footer-icon" />
-          <div>
-            <h5 className="font-bold text-ivy-800 text-xs mb-1">Quick Tip for Creating Diagrams</h5>
-            <p className="text-xs text-ivy-700 leading-relaxed">
-              To make system diagrams, visit a project and open the Diagrams Generator tab. You can copy the generated scripts instantly!
-            </p>
           </div>
         </div>
       </div>

@@ -237,7 +237,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-lg font-serif font-bold text-stone-900 tracking-tight">Your Projects</h2>
-          <p className="text-xs text-stone-500 mt-0.5 font-medium">Create and manage your software design projects.</p>
+          <p className="text-xs text-stone-500 mt-0.5 font-medium">Create and manage your software design projects</p>
         </div>
 
         <button
@@ -289,13 +289,13 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
             <button
               type="button"
               onClick={() => setShowCreateForm(false)}
-              className="px-3.5 py-1.5 rounded-lg border border-stone-250 text-stone-600 hover:bg-stone-50 text-xs"
+              className="cursor-pointer px-3.5 py-1.5 rounded-lg border border-stone-250 text-stone-600 hover:bg-stone-50 text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 bg-ivy-600 hover:bg-ivy-700 text-white rounded-lg text-xs font-semibold"
+              className="cursor-pointer px-4 py-1.5 bg-ivy-600 hover:bg-ivy-700 text-white rounded-lg text-xs font-semibold"
             >
               Create Project
             </button>
@@ -338,7 +338,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                     {/* Delete action US6 (Only show or validate for owners) */}
                     <button
                       onClick={(e) => handleDeleteProject(p, e)}
-                      className="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-rose-50/50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-ivy-50 hover:bg-rose-600 rounded-lg transition-colors cursor-pointer"
                       title="Delete project"
                     >
                       <Trash className="h-3.5 w-3.5" />
@@ -389,7 +389,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                         />
                         <button
                           type="submit"
-                          className="bg-ivy-600 hover:bg-ivy-700 text-white rounded px-2 py-0.5 text-[9px] font-bold shrink-0"
+                          className="cursor-pointer bg-ivy-600 hover:bg-ivy-700 text-white rounded px-2 py-0.5 text-[9px] font-bold shrink-0"
                         >
                           Share
                         </button>
@@ -446,9 +446,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                                     <span className="text-[8px] text-stone-450 truncate">{t.email}</span>
                                   </div>
                                 </div>
-                                <span className="text-[8px] text-ivy-600 font-bold hover:underline shrink-0 pl-1">
-                                  Select + Share
-                                </span>
                               </button>
                             ))
                           )}
@@ -469,7 +466,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                         title="Invite teammates to project"
                       >
                         <Share2 className="h-3 w-3 shrink-0" />
-                        <span>Share</span>
                       </button>
  
                       {/* Open dossier button */}
