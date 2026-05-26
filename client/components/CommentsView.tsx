@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Send, User as UserIcon, Trash2 } from 'lucide-react';
 import { Comment } from '../types/index.js';
@@ -142,25 +137,28 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
       <div className="space-y-3 max-h-[220px] overflow-y-auto mb-4 pr-1 scrollbar-thin">
         {comments.length === 0 ? (
           <p className="text-xs text-slate-400 italic text-center py-4">
-            No comments yet. Start the collaboration thread with your team!
+            No comments posted yet. Start a collaboration thread with your team!
           </p>
         ) : (
           comments.map(c => (
             <div key={c.id} className="bg-white p-3 rounded-lg border border-slate-100 shadow-3xs text-xs">
               <div className="flex justify-between items-center mb-1 text-slate-500">
                 <div className="flex items-center gap-1.5 font-semibold text-slate-800">
-                  {c.userAvatarUrl ? (
-                    <img 
-                      src={c.userAvatarUrl} 
-                      alt={c.userName} 
-                      referrerPolicy="no-referrer"
-                      className="h-4 w-4 rounded-full object-cover border border-ivy-250/55" 
-                    />
-                  ) : (
-                    <div className="h-4 w-4 rounded-full bg-ivy-100 text-ivy-700 flex items-center justify-center text-[9px] font-bold uppercase">
-                      {c.userName ? c.userName[0] : <UserIcon className="h-2 w-2" />}
-                    </div>
-                  )}
+                  {(() => {
+                    const avatar = c.userAvatarUrl || c.avatarUrl;
+                    return avatar ? (
+                      <img
+                        src={avatar} 
+                        alt={c.userName} 
+                        referrerPolicy="no-referrer"
+                        className="h-5 w-5 rounded-full object-cover border border-ivy-200 shrink-0" 
+                      />
+                    ) : (
+                      <div className="h-5 w-5 rounded-full bg-ivy-100 text-ivy-700 flex items-center justify-center text-[10px] font-bold uppercase shrink-0">
+                        {c.userName ? c.userName[0] : <UserIcon className="h-2.5 w-2.5" />}
+                      </div>
+                    );
+                  })()}
                   <span>{c.userName}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -197,7 +195,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         <button
           type="submit"
           disabled={!text.trim() || loading}
-          className="absolute right-1 text-indigo-600 hover:text-indigo-800 p-1.5 rounded disabled:opacity-30 flex items-center justify-center"
+          className="cursor-pointer absolute right-1 text-indigo-300 hover:text-indigo-300 p-1.5 rounded disabled:opacity-30 disabled:cursor-default flex items-center justify-center"
           title="Send comment"
         >
           <Send className="h-4 w-4" />

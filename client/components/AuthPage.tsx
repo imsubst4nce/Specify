@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect, useRef } from 'react';
 import { ShieldAlert, Lock, Mail, User as UserIcon, CheckCircle2, ArrowRight, Upload, Trash2 } from 'lucide-react';
 
@@ -386,6 +381,7 @@ export default function AuthPage({
                       accept="image/*"
                       onChange={handleFileChange}
                       className="hidden"
+                      title="Upload profile avatar image"
                     />
                     <Upload className={`h-4 w-4 mb-1 transition-colors ${dragActive ? 'text-ivy-600' : 'text-stone-400'}`} />
                     <span className="text-xs font-bold text-stone-700 leading-tight">

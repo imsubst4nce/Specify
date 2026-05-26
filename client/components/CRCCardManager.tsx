@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect } from 'react';
 import { Trash, Edit, ArrowLeft, CheckSquare, PlusCircle, Check, Layers } from 'lucide-react';
 import { CRCCard, UseCase } from '../types/index.js';
@@ -260,12 +255,6 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
         {crcCards.length === 0 ? (
           <div className="text-center py-8 border border-dashed border-slate-200 rounded-lg">
             <p className="text-xs text-slate-400 italic">No CRC cards specified yet</p>
-            <button
-              onClick={startCreate}
-              className="text-[11px] text-ivy-600 hover:underline font-semibold mt-2 block mx-auto cursor-pointer"
-            >
-              Analyze a new domain class
-            </button>
           </div>
         ) : (
           <div className="space-y-1.5 max-h-[450px] overflow-y-auto pr-1">
@@ -282,20 +271,20 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                   }}
                   className={`flex justify-between items-center p-3 rounded-lg border text-left cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
-                      : 'bg-slate-50 border-slate-200/60 hover:border-slate-300 text-slate-700'
+                      ? 'bg-ivy-900 border-ivy-900 text-white shadow-xs'
+                      : 'bg-ivy-50 border-ivy-200/60 text-ivy-100'
                   }`}
                 >
                   <div className="min-w-0 pr-2">
                     <p className="text-xs font-bold font-mono truncate">{card.className}</p>
-                    <p className="text-[10px] text-slate-400 truncate mt-0.5">{card.description || 'No description provided'}</p>
+                    <p className="text-[10px] opacity-75 truncate mt-0.5">{card.description || 'No description provided'}</p>
                   </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       deleteCard(card);
                     }}
-                    className={`p-1 rounded-md transition-colors ${isSelected ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-400 hover:text-rose-600 hover:bg-slate-100'}`}
+                    className={`cursor-pointer p-1 rounded-md transition-colors ${isSelected ? 'text-slate-100 hover:bg-rose-600' : 'text-slate-100 hover:bg-rose-600'}`}
                     title="Delete card classification"
                   >
                     <Trash className="h-3.5 w-3.5" />
@@ -315,6 +304,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
               <button
                 type="button"
+                title="Back"
                 onClick={() => {
                   setIsCreating(false);
                   setIsEditing(false);
@@ -396,6 +386,8 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                         />
                         <button
                           type="button"
+                          title="Remove responsibility"
+                          aria-label="Remove responsibility"
                           onClick={() => handleRemoveField('resp', idx)}
                           disabled={responsibilities.length <= 1}
                           className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-slate-50 rounded disabled:opacity-30 cursor-pointer"
@@ -435,6 +427,8 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                         />
                         <button
                           type="button"
+                          title="Remove collaborator"
+                          aria-label="Remove collaborator"
                           onClick={() => handleRemoveField('collab', idx)}
                           disabled={collaborators.length <= 1}
                           className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-slate-50 rounded disabled:opacity-30 cursor-pointer"
@@ -515,6 +509,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
               <button
                 onClick={() => startEdit(selectedCard)}
                 className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer"
+                title="Edit card details"
               >
                 <Edit className="h-3.5 w-3.5" />
                 <span>Edit card details</span>

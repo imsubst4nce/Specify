@@ -1,9 +1,4 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
  * Represents a registered user account within the requirements workspace ecosystem.
  */
 export interface User {
@@ -66,6 +61,7 @@ export interface Comment {
   userId: string;
   userName: string;
   userAvatarUrl?: string; // Optional user avatar corresponding to the author
+  avatarUrl?: string; // Optional user avatar fallback directly matching Spring domain model
   text: string;
   createdAt: string;
 }

@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash, Edit, PlusSquare, ArrowLeft, ArrowUpCircle, Users, Clipboard, ListOrdered, FileText, Check } from 'lucide-react';
 import { UseCase } from '../types/index.js';
@@ -255,7 +250,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                       e.stopPropagation();
                       deleteUseCase(uc);
                     }}
-                    className={`p-1 rounded-md transition-colors ${isSelected ? 'text-slate-100 hover:bg-rose-600' : 'text-slate-100 hover:bg-rose-600'}`}
+                    className={`cursor-pointer p-1 rounded-md transition-colors ${isSelected ? 'text-slate-100 hover:bg-rose-600' : 'text-slate-100 hover:bg-rose-600'}`}
                     title="Delete specification"
                   >
                     <Trash className="h-3.5 w-3.5" />
@@ -274,6 +269,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
           <form onSubmit={saveUseCase} className="bg-white p-6 rounded-xl border border-slate-100 shadow-2xs space-y-5">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
               <button
+                title='Go back to use case list'
                 type="button"
                 onClick={() => {
                   setIsCreating(false);

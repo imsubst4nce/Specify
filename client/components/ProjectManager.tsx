@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState, useEffect } from 'react';
 import { Trash, FolderClosed, Users, Share2, Plus, LogIn, Calendar, Mail, CheckCircle2 } from 'lucide-react';
 import { Project } from '../types/index.js';

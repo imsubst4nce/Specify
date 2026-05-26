@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect } from 'react';
 import { ArrowLeft, BookOpen, Layers, ShieldAlert, Sun, Moon } from 'lucide-react';
 import Navigation from './layout/Navigation.js';

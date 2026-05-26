@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { useState, useEffect } from 'react';
 import { Copy, Code, CheckCircle, RefreshCw, Sparkles, Server, ArrowRight } from 'lucide-react';
 import { UseCase, CRCCard } from '../types/index.js';

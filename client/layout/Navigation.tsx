@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { LogOut, Sun, Moon, Settings } from 'lucide-react';
 
 interface NavigationProps {

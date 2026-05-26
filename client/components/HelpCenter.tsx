@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import { BookOpen, CheckCircle, AlertTriangle, Shield, Layers, HelpCircle } from 'lucide-react';
 
 /**
