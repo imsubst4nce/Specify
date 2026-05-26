@@ -122,10 +122,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
       <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-2xs">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <span className="text-[10px] font-bold text-ivy-700 uppercase tracking-wider block">
-              Specify Drawing Engine Support
-            </span>
-            <h3 className="text-sm font-serif font-bold text-ivy-950 mt-0.5">UML Diagrams Script Workspace</h3>
+            <h3 className="text-sm font-serif font-bold text-ivy-950 mt-0.5">UML Diagram Script Generator</h3>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
@@ -197,15 +194,9 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                Interactive Visual Diagram Preview
+                Diagram Preview
               </h4>
-              <p className="text-[10px] text-slate-500 mt-0.5">
-                Dynamic SVG/HTML mapping computed locally based on project dependencies
-              </p>
             </div>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold border border-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
-              <Sparkles className="h-3 w-3" /> Live Preview
-            </span>
           </div>
 
           <div className="bg-slate-50/50 rounded-xl border border-slate-200 min-h-[380px] p-6 flex flex-col justify-between overflow-hidden relative" id="visual-uml-sandbox">
@@ -214,8 +205,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
               /* USE CASE LIVE DIAGRAM */
               useCases.length === 0 ? (
                 <div className="m-auto text-center space-y-1">
-                  <span className="text-xs text-slate-400 italic">No use cases specified to illustrate diagram model</span>
-                  <p className="text-[10px] text-slate-400">Go to specifications section and add use cases.</p>
+                  <span className="text-xs text-slate-400 italic">No Use Cases specified yet</span>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -287,8 +277,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
               /* CLASS / CRC CARD LIVE DIAGRAM */
               crcCards.length === 0 ? (
                 <div className="m-auto text-center space-y-1">
-                  <span className="text-xs text-slate-400 italic">No CRC Cards specified to generate class diagram relationships</span>
-                  <p className="text-[10px] text-slate-400 font-medium font-serif">Create CRC Cards first.</p>
+                  <span className="text-xs text-slate-400 italic">No CRC Cards specified yet</span>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -327,13 +316,6 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
                 </div>
               )
             )}
-
-            {/* Render advice footer */}
-            <div className="border-t border-ivy-150 pt-3 flex justify-between items-center text-[10px] text-ivy-500">
-              <span className="flex items-center gap-1">
-                <Server className="h-3.5 w-3.5 text-ivy-600" /> Drawn dynamically based on current template designs
-              </span>
-            </div>
           </div>
         </div>
 
@@ -345,7 +327,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
               <Code className="h-4 w-4 text-slate-400" />
               <div>
                 <span className="text-[9px] font-bold text-ivy-300 font-mono block">
-                  {selectedTool === 'plantuml' ? 'PlantUML Format' : 'Nomnoml Outlines'}
+                  {selectedTool === 'plantuml' ? 'PlantUML' : 'Nomnoml'}
                 </span>
                 <span className="text-xs font-bold text-white uppercase tracking-wider block">
                   UML Script Output
@@ -389,7 +371,7 @@ export default function DiagramGeneratorView({ projectId }: DiagramGeneratorView
 
           <div className="p-4 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 leading-relaxed">
             <p>
-              This code text complies with the <strong>{selectedTool.toUpperCase()}</strong> schema specification format. Copy it to any compatible rendering tool or visit <strong>{selectedTool === 'plantuml' ? 'plantuml.com' : 'nomnoml.com'}</strong> to generate highly structured Vector graphics graphs immediately.
+              This code snippet follows the <strong>{selectedTool.toUpperCase()}</strong> format. Copy it to any compatible tool or visit <strong>{selectedTool === 'plantuml' ? 'plantuml.com' : 'nomnoml.com'}</strong> to generate the diagram.
             </p>
           </div>
         </div>

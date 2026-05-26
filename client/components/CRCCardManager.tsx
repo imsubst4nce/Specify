@@ -9,23 +9,18 @@ interface CRCCardManagerProps {
 }
 
 /**
- * Component to manage Class Responsibility Collaborator (CRC) index cards,
- * allowing class description creation, collaborative class bindings, and system linkage.
+ * Component to manage Class Responsibility Collaborator (CRC) index cards
  */
 export default function CRCCardManager({ projectId, currentUserId }: CRCCardManagerProps) {
-  // lists of CRC index cards and loaded use cases for relationship linking
   const [crcCards, setCrcCards] = useState<CRCCard[]>([]);
   const [useCases, setUseCases] = useState<UseCase[]>([]);
-  // holds currently active CRC card design node
   const [selectedCard, setSelectedCard] = useState<CRCCard | null>(null);
 
-  // dialog status and notice handlers
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
   const [cardToDelete, setCardToDelete] = useState<CRCCard | null>(null);
 
-  // Input bindings matching CRC card properties
   const [className, setClassName] = useState('');
   const [description, setDescription] = useState('');
   const [responsibilities, setResponsibilities] = useState<string[]>(['']);
@@ -35,12 +30,12 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
   const token = localStorage.getItem('token');
 
   /**
-   * Fetches Class cards and Use cases in parallel to support direct cross-referencing
+   * Fetches CRC cards and Use Cases
    */
   const fetchCRCDependencies = async () => {
     if (!token) return;
     try {
-      // Fetch CRC Cards (US11)
+      // Fetch CRC Cards
       const crcRes = await fetch(`/api/projects/${projectId}/crccards`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -57,7 +52,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
         }
       }
 
-      // Fetch Use Cases (for US13 linking)
+      // Fetch Use Cases
       const ucRes = await fetch(`/api/projects/${projectId}/usecases`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -75,7 +70,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
   }, [projectId]);
 
   /**
-   * Opens forms and resets state keys to define a new Class Responsibility structural card
+   * Opens forms and resets state keys to create a new CRC card
    */
   const startCreate = () => {
     setClassName('');
@@ -89,7 +84,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
   };
 
   /**
-   * Loads existing class specification data into form input fields to trigger edit mode
+   * Edit a CRC card
    */
   const startEdit = (card: CRCCard) => {
     setClassName(card.className);
@@ -102,9 +97,6 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
     setIsCreating(false);
   };
 
-  /**
-   * Increments dynamically sized array fields within the creation forms
-   */
   const handleAddField = (type: 'resp' | 'collab') => {
     if (type === 'resp') {
       setResponsibilities(prev => [...prev, '']);
@@ -114,7 +106,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
   };
 
   /**
-   * Removes item from the dynamic text array at a specific index
+   * Removes item from array on specific index
    */
   const handleRemoveField = (type: 'resp' | 'collab', index: number) => {
     if (type === 'resp') {
@@ -126,9 +118,6 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
     }
   };
 
-  /**
-   * Maps live input modifications into the correct index of text array collections
-   */
   const handleFieldValueChange = (type: 'resp' | 'collab', index: number, val: string) => {
     if (type === 'resp') {
       const updated = [...responsibilities];
@@ -142,7 +131,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
   };
 
   /**
-   * Toggles use case binding identifiers to map behavioral specs on the class responsibility cards
+   * Link to Use Case
    */
   const toggleUseCaseLink = (ucId: string) => {
     setLinkedUseCaseIds(prev => {
@@ -154,13 +143,11 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
     });
   };
 
-  /**
-   * Submits newly specified or updated CRC structures to the database layer
-   */
+  // Call to endpoint for database mutation
   const saveCRCCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!className.trim()) {
-      setError('Class name is required (use safe Noun phrases)');
+      setError('Class name is required (use Nouns)');
       return;
     }
 
@@ -207,7 +194,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
         setError(err.error || 'Failed to save CRC card');
       }
     } catch {
-      setError('Connection failure saving CRC card details');
+      setError('Connection failure while saving CRC card details');
     }
   };
 
@@ -232,7 +219,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
         setError(err.error || 'Failed to delete CRC card');
       }
     } catch {
-      setError('Connection failure deleting CRC Card');
+      setError('Connection failure while deleting CRC Card');
     }
   };
 
@@ -254,7 +241,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
 
         {crcCards.length === 0 ? (
           <div className="text-center py-8 border border-dashed border-slate-200 rounded-lg">
-            <p className="text-xs text-slate-400 italic">No CRC cards specified yet</p>
+            <p className="text-xs text-slate-400 italic">No CRC cards created yet</p>
           </div>
         ) : (
           <div className="space-y-1.5 max-h-[450px] overflow-y-auto pr-1">
@@ -612,9 +599,9 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
         ) : (
           <div className="bg-white p-12 rounded-xl border border-slate-100 shadow-2xs text-center flex flex-col items-center justify-center">
             <Layers className="h-8 w-8 text-slate-300 mb-2" />
-            <p className="text-slate-500 text-xs font-semibold">Select an existing CRC Card class or click Create above</p>
+            <p className="text-slate-500 text-xs font-semibold">Click Create to start</p>
             <p className="text-[10px] text-slate-400 mt-1 max-w-sm">
-              CRC Index cards let you model the Object-Oriented responsibilities and direct collaborators of your database and domain classes.
+              CRC cards model the responsibilities and collaborators of each class.
             </p>
           </div>
         )}

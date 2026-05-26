@@ -11,21 +11,21 @@ interface CommentsProps {
 }
 
 /**
- * Component to present and write collaboration comments on a specific target node (Use Cases or CRC Cards).
+ * Component to present and write collaboration comments on Use Cases or CRC Cards.
  */
 export default function CommentsView({ projectId, targetType, targetId, targetTitle, currentUserId }: CommentsProps) {
-  // lists comments tied to the active requirements component
   const [comments, setComments] = useState<Comment[]>([]);
-  // active text in the input draft field
   const [text, setText] = useState('');
-  // activity loading and connection warning states
+  
+  // status indicators
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // needed for the authorization header
   const token = localStorage.getItem('token');
 
   /**
-   * Loads comment thread from the API based on target type and unique identifier
+   * Fetch the comments
    */
   const fetchComments = async () => {
     if (!token) return;
@@ -45,7 +45,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         setError(err.error || 'Failed to fetch comments');
       }
     } catch {
-      setError('Connection failure loading comments');
+      setError('Communication failure while loading comments');
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
   }, [targetId, targetType]);
 
   /**
-   * Deletes a comment written by the current user
+   * Delete a comment written by the current user
    */
   const handleDeleteComment = async (commentId: string) => {
     if (!token) return;
@@ -75,12 +75,12 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         setError(err.error || 'Failed to delete comment');
       }
     } catch {
-      setError('Connection failure deleting comment');
+      setError('Communication failure while deleting comment');
     }
   };
 
   /**
-   * Posts structural comment to database and updates local listing upon success
+   * Saves comment to database and updates local listing upon success
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,7 +111,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         setError(err.error || 'Failed to add comment');
       }
     } catch {
-      setError('Network failure sending comment');
+      setError('Communication failure while sending comment');
     }
   };
 
@@ -133,11 +133,11 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         </p>
       )}
 
-      {/* List */}
+      {/* Comment list */}
       <div className="space-y-3 max-h-[220px] overflow-y-auto mb-4 pr-1 scrollbar-thin">
         {comments.length === 0 ? (
           <p className="text-xs text-slate-400 italic text-center py-4">
-            No comments posted yet. Start a collaboration thread with your team!
+            Be the first one to comment!
           </p>
         ) : (
           comments.map(c => (
@@ -182,7 +182,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
         )}
       </div>
 
-      {/* Input Form */}
+      {/* Input form for writing the comment */}
       <form onSubmit={handleSubmit} className="relative flex items-center gap-1">
         <input
           type="text"

@@ -506,9 +506,9 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
         ) : (
           <div className="bg-white p-12 rounded-xl border border-slate-100 shadow-2xs text-center flex flex-col items-center justify-center">
             <FileText className="h-8 w-8 text-slate-300 mb-2" />
-            <p className="text-slate-500 text-xs font-semibold">Select a Use Case definition or click Define above</p>
+            <p className="text-slate-500 text-xs font-semibold">Click Define to start</p>
             <p className="text-[10px] text-slate-400 mt-1 max-w-sm">
-              Use cases allow developers to map user actions against the system's responses and constraints.
+              Use cases describe how a user interacts with the system and how the system responds.
             </p>
           </div>
         )}

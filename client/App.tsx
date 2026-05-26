@@ -369,7 +369,7 @@ export default function App() {
                       : 'text-stone-600 hover:text-ivy-700'
                   }`}
                 >
-                  Help & Tutorial
+                  Guidelines & Quick Start
                 </button>
               </div>
             </div>

@@ -487,7 +487,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
       {projectToDelete && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" onClick={(e) => e.stopPropagation()}>
           <div className="bg-white rounded-xl border border-slate-100 shadow-xl max-w-sm w-full p-5 space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider text-rose-600 block text-serif">Delete Requirements Dossier?</h3>
+            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider text-rose-600 block text-serif">Delete Project?</h3>
             <p className="text-[11px] text-slate-500 leading-normal">
               Are you sure you want to delete <strong className="text-slate-700">"{projectToDelete.name}"</strong>? This will permanently delete all enclosed Use Cases, CRC class cards, and collaborator discussions.
             </p>
