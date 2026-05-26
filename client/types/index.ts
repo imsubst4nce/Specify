@@ -29,7 +29,7 @@ export interface UseCase {
   id: string;
   projectId: string;
   title: string;
-  actors: string[]; // e.g., ["Developer", "System"]
+  actors: string[]; // e.g. ["Developer", "System"]
   preconditions: string;
   mainFlow: string[]; // Array of step descriptions
   postconditions: string;

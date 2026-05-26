@@ -283,10 +283,9 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
         )}
       </div>
 
-      {/* Main Panel Detail Form & Interactive physical card view */}
       <div className="lg:col-span-8">
         {isCreating || isEditing ? (
-          /* Create or Edit Form definitions */
+          /* Create or Edit forms */
           <form onSubmit={saveCRCCard} className="bg-white p-6 rounded-xl border border-slate-100 shadow-2xs space-y-5">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
               <button
@@ -302,7 +301,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                 <ArrowLeft className="h-4 w-4" />
               </button>
               <h3 className="text-sm font-bold text-slate-900 font-sans">
-                {isCreating ? 'Define New Class Card' : 'Update Class Specifications'}
+                {isCreating ? 'Create New CRC Card' : 'Edit CRC Card Specifications'}
               </h3>
             </div>
 
@@ -319,7 +318,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g., AuthController or UseCaseTemplate"
+                    placeholder="e.g. AuthController"
                     value={className}
                     onChange={e => setClassName(e.target.value)}
                     className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 font-mono focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -330,11 +329,11 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                 {/* Class Description */}
                 <div>
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
-                    Domain Responsibility Summary
+                    Class Description
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g., Decouples view interaction from database mapping model"
+                    placeholder="e.g. Authenticates a user by verifying his credentials"
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                     className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -348,7 +347,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                      Responsibilities obligations <span className="text-rose-600 font-extrabold ml-1" title="Required">*</span>
+                      Class Responsibilities <span className="text-rose-600 font-extrabold ml-1" title="Required">*</span>
                     </label>
                     <button
                       type="button"
@@ -365,7 +364,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                       <div key={idx} className="flex gap-1 items-center">
                         <input
                           type="text"
-                          placeholder="e.g., Compiles templates into script directives"
+                          placeholder="e.g. Encode sensitive data"
                           value={resp}
                           onChange={e => handleFieldValueChange('resp', idx, e.target.value)}
                           className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-2.5 py-1.5 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -407,7 +406,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                       <div key={idx} className="flex gap-1 items-center">
                         <input
                           type="text"
-                          placeholder="e.g., dbStore or classDiagramGenerator"
+                          placeholder="e.g. HashedPasswordGenerator"
                           value={collab}
                           onChange={e => handleFieldValueChange('collab', idx, e.target.value)}
                           className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-2.5 py-1.5 font-mono focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -432,14 +431,14 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
                 <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1">
                   <CheckSquare className="h-4 w-4 text-ivy-600" />
-                  Supportive Use Cases Linking
+                  Link Use Cases
                 </h5>
                 <p className="text-xs text-slate-500 mb-3 block leading-normal">
                   Select the use cases supported by this class:
                 </p>
 
                 {useCases.length === 0 ? (
-                  <p className="text-xs text-slate-400 italic">No use cases exist to link to. Define them first!</p>
+                  <p className="text-xs text-slate-400 italic">No use cases exist to link to</p>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[120px] overflow-y-auto pr-1">
                     {useCases.map(uc => {
@@ -482,7 +481,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                 type="submit"
                 className="px-4 py-2 bg-ivy-600 hover:bg-ivy-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer"
               >
-                Save Card Design
+                Save Card
               </button>
             </div>
           </form>
@@ -491,7 +490,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
           <div className="space-y-6">
             <div className="flex justify-between items-center mb-1">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                CLASS RESPONSIBILITY SPECIFICATIONS
+                CLASS RESPONSIBILITY COLLABORATORS CARD
               </span>
               <button
                 onClick={() => startEdit(selectedCard)}
@@ -499,7 +498,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
                 title="Edit card details"
               >
                 <Edit className="h-3.5 w-3.5" />
-                <span>Edit card details</span>
+                <span>Edit</span>
               </button>
             </div>
 
@@ -511,7 +510,7 @@ export default function CRCCardManager({ projectId, currentUserId }: CRCCardMana
               <div className="pl-8 border-b border-ivy-200 pb-3 flex justify-between items-start">
                 <div>
                   <span className="text-[9px] font-bold uppercase tracking-widest text-ivy-850 bg-ivy-100/80 border border-ivy-200 px-2 py-0.5 rounded">
-                    CRC index Card Representation
+                    CRC Card Representation
                   </span>
                   <h3 className="text-xl font-bold font-mono text-ivy-950 mt-2">{selectedCard.className}</h3>
                 </div>

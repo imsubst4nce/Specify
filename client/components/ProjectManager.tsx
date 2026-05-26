@@ -266,7 +266,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
               </label>
               <input
                 type="text"
-                placeholder="e.g., Online Store or Task Tracker App"
+                placeholder="e.g. Online Bookstore or Note Keeping Web app"
                 value={name}
                 onChange={e => setName(e.target.value)}
                 className="w-full text-xs bg-stone-50 text-stone-800 border border-stone-200 rounded-lg px-3 py-2 focus:ring-1 focus:ring-ivy-600 focus:outline-none"
@@ -277,7 +277,7 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
               <label className="text-xs uppercase tracking-wider font-extrabold text-stone-500 block mb-1">Project Description</label>
               <input
                 type="text"
-                placeholder="e.g., Use cases and class structures for our new workspace"
+                placeholder="e.g. A modern lightweight Spring Boot-based note keeping app"
                 value={description}
                 onChange={e => setDescription(e.target.value)}
                 className="w-full text-xs bg-stone-50 text-stone-800 border border-stone-200 rounded-lg px-3 py-2 focus:ring-1 focus:ring-ivy-600 focus:outline-none"
@@ -308,9 +308,6 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
         <div className="bg-white border border-dashed border-stone-200 rounded-2xl p-12 text-center flex flex-col items-center justify-center">
           <FolderClosed className="h-10 w-10 text-stone-350 mb-3" />
           <h3 className="text-base font-bold text-stone-700">No projects yet</h3>
-          <p className="text-xs text-stone-500 mt-1.5 max-w-sm leading-normal">
-            Create a project to start model use cases, CRC cards, and diagrams.
-          </p>
           <button
             onClick={() => setShowCreateForm(true)}
             className="text-xs text-ivy-600 hover:underline font-bold mt-4 cursor-pointer"

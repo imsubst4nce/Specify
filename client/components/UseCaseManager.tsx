@@ -281,7 +281,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 <ArrowLeft className="h-4 w-4" />
               </button>
               <h3 className="text-sm font-bold text-slate-900 font-sans">
-                {isCreating ? 'Define New Use Case' : 'Edit Use Case Definition'}
+                {isCreating ? 'Define New Use Case Specification' : 'Edit Use Case Definition'}
               </h3>
             </div>
 
@@ -297,7 +297,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g., Secure login of user or Generate PlantUML report"
+                  placeholder="e.g. Secure login of user"
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -308,11 +308,11 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
               {/* Actors */}
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">
-                  Actors (Comma-separated list)
+                  Actors
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g., Developer, Database, System (At least one)"
+                  placeholder="e.g. User, Developer, Database"
                   value={actorsString}
                   onChange={e => setActorsString(e.target.value)}
                   className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -325,7 +325,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                   Pre-conditions
                 </label>
                 <textarea
-                  placeholder="e.g., User is securely logged in to account workspace."
+                  placeholder="e.g. User is not already logged in"
                   value={preconditions}
                   onChange={e => setPreconditions(e.target.value)}
                   className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 h-14 focus:ring-1 focus:ring-indigo-500 focus:outline-none resize-none"
@@ -336,7 +336,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
               <div>
                 <div className="flex justify-between items-center mb-1.5">
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Main Flow Events sequence <span className="text-rose-600 font-extrabold ml-1" title="Required">*</span>
+                    Main Flow <span className="text-rose-600 font-extrabold ml-1" title="Required">*</span>
                   </label>
                   <button
                     type="button"
@@ -354,7 +354,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                       <span className="text-xs font-mono font-bold text-slate-400 w-5 text-right">{idx + 1}.</span>
                       <input
                         type="text"
-                        placeholder={`e.g., User submits the requested credentials configuration...`}
+                        placeholder={`e.g. User submits the requested credentials`}
                         value={step}
                         onChange={e => handleStepValueChange(idx, e.target.value)}
                         className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
@@ -380,7 +380,7 @@ export default function UseCaseManager({ projectId, currentUserId }: UseCaseMana
                   Post-conditions
                 </label>
                 <textarea
-                  placeholder="e.g., System saves updated project state details and redirects to home grid."
+                  placeholder="e.g. System verifies user credentials and redirects him"
                   value={postconditions}
                   onChange={e => setPostconditions(e.target.value)}
                   className="w-full text-xs bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 py-2 h-14 focus:ring-1 focus:ring-indigo-500 focus:outline-none resize-none"
