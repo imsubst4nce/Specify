@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ShieldAlert, Lock, Mail, User as UserIcon, CheckCircle2, ArrowRight, Upload, Trash2, FileIcon } from 'lucide-react';
 
 interface AuthPageProps {
-  onAuthSuccess?: (user: { id: string; name: string; email: string; avatarUrl?: string }, token: string) => void;
+  onAuthSuccess?: (user: { id: string; name: string; email: string }, token: string) => void;
   editMode?: boolean;
-  currentUser?: { id: string; name: string; email: string; avatarUrl?: string } | null;
-  onProfileUpdateCancel?: () => void;
+  currentUser?: { id: string; name: string; email: string } | null;
+  onProfileDelete?: () => void;
 }
 
 interface AuthHeaderProps {
@@ -100,7 +100,7 @@ export default function AuthPage({
   onAuthSuccess,
   editMode = false,
   currentUser,
-  onProfileUpdateCancel,
+  onProfileDelete
 }: AuthPageProps) {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
 
@@ -109,16 +109,12 @@ export default function AuthPage({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState('');
-
-  // Drag-and-Drop state
-  const [dragActive, setDragActive] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Status indicators
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Handle tab switch (must reset fields everytime)
   const handleTabChange = (tab: 'login' | 'register') => {
@@ -130,77 +126,11 @@ export default function AuthPage({
     setSuccess('');
   };
 
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const processFile = (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      setError('Please provide a valid image file format (e.g PNG, JPG, WEBP)');
-      return;
-    }
-    
-    // Check if the file size is not (up to 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      setError('Image file is too large. Please upload an image under 2MB.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target && typeof event.target.result === 'string') {
-        setAvatarUrl(event.target.result);
-        setError('');
-      } else {
-        setError('Failed to read image file');
-      }
-    };
-    reader.onerror = () => {
-      setError('Error reading image file');
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      processFile(e.dataTransfer.files[0]);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (e.target.files && e.target.files[0]) {
-      processFile(e.target.files[0]);
-    }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
-  const removeAvatar = () => {
-    setAvatarUrl('');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
   // Synchronize in editMode
   useEffect(() => {
     if (editMode && currentUser) {
       setName(currentUser.name);
       setEmail(currentUser.email);
-      setAvatarUrl(currentUser.avatarUrl || '');
       setPassword('');
       setCurrentPassword('');
       setError('');
@@ -234,7 +164,7 @@ export default function AuthPage({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ name, email, password, currentPassword, avatarUrl }),
+          body: JSON.stringify({ name, email, password, currentPassword }),
         });
 
         if (res.ok) {
@@ -283,6 +213,56 @@ export default function AuthPage({
     }
   };
 
+  const handleProfileDeletePress = () => {
+    if (!currentPassword) {
+      setError('Your current password is required to delete your profile');
+      return;
+    }
+
+    setShowDeleteConfirm(true);
+  };
+
+  const handleProfileDelete = async () => {
+    setShowDeleteConfirm(false)
+
+    try {
+      setLoading(true);
+      setError('');
+      setSuccess('');
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Authentication token is missing');
+        return;
+      }
+
+      const res = await fetch('/api/auth/profile', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ currentPassword }),
+      });
+
+      if (res.ok) {
+        setSuccess('Profile deleted successfully.');
+        localStorage.removeItem('token');
+        setShowDeleteConfirm(false);
+        if (onProfileDelete) {
+          onProfileDelete();
+        }
+      } else {
+        const err = await res.json();
+        setError(err.error || 'Failed to delete profile');
+      }
+    } catch {
+      setError('Communication with authentication servers failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={`mx-auto w-full ${editMode ? 'max-w-md' : 'max-w-sm mt-12'}`} id="auth-portal-root">
       <div className="bg-white rounded-2xl shadow-md overflow-hidden">
@@ -317,75 +297,6 @@ export default function AuthPage({
           )}
 
           <div className="space-y-3.5">
-            {/* Avatar upload */}
-            {editMode && (
-              <div className="space-y-2" id="avatar-dropzone-row">
-                <label className="text-xs font-bold text-stone-500 uppercase tracking-wider block">
-                  Profile Avatar Image
-                </label>
-                
-                <div className="flex items-center gap-4 bg-stone-50 p-3 rounded-xl border border-stone-200">
-                  <div className="relative group shrink-0">
-                    {avatarUrl ? (
-                      <img 
-                        src={avatarUrl} 
-                        alt="Avatar Preview" 
-                        referrerPolicy="no-referrer"
-                        className="h-14 w-14 rounded-full object-cover border-2 border-white shadow-xs"
-                      />
-                    ) : (
-                      <div className="h-14 w-14 rounded-full bg-ivy-100 border border-ivy-200 text-ivy-700 flex items-center justify-center font-extrabold text-lg uppercase shadow-2xs">
-                        {name ? name[0] : 'U'}
-                      </div>
-                    )}
-                    
-                    {avatarUrl && (
-                      <button
-                        type="button"
-                        onClick={removeAvatar}
-                        className="absolute -top-1 -right-1 p-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all shadow-xs cursor-pointer"
-                        title="Remove Avatar image"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
-                    )}
-                  </div>
-
-                  <div 
-                    onDragEnter={handleDrag}
-                    onDragOver={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDrop={handleDrop}
-                    onClick={triggerFileInput}
-                    className={`flex-1 flex flex-col items-center justify-center py-3.5 px-3 border-2 border-dashed rounded-lg text-center cursor-pointer select-none transition-all ${
-                      dragActive 
-                        ? 'border-ivy-600 bg-ivy-50/50' 
-                        : 'border-stone-300 hover:border-ivy-500/50 hover:bg-white'
-                    }`}
-                  >
-                    <input 
-                      ref={fileInputRef}
-                      type="file" 
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="hidden"
-                      title="Upload profile avatar"
-                    />
-                    <Upload className={`h-4 w-4 mb-1 transition-colors ${dragActive ? 'text-ivy-600' : 'text-stone-400'}`} />
-                    <span className="text-xs font-bold text-stone-700 leading-tight">
-                      {dragActive ? 'Drop image here' : 'Drop image or click here to upload'}
-                    </span>
-                    <span className="text-[10px] text-stone-400 mt-0.5 leading-none">
-                      PNG, JPG or WEBP
-                    </span>
-                    <span className="text-[10px] text-stone-400 mt-0.5 leading-none">
-                      ( max 2 MB )
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Optional name field (only in register and edit view) */}
             {(editMode || activeTab === 'register') && (
               <InputField
@@ -444,24 +355,52 @@ export default function AuthPage({
               {loading
                 ? 'Saving updates...'
                 : editMode
-                ? 'Save Profile changes'
+                ? 'Save changes'
                 : activeTab === 'login'
                 ? 'Login'
                 : 'Create Account'}
             </span>
-            {!loading && <ArrowRight className="h-3.5 w-3.5" />}
+            {!loading}
           </button>
 
-          {editMode && onProfileUpdateCancel && (
+          {editMode && (
             <button
               type="button"
-              onClick={onProfileUpdateCancel}
-              className="w-full bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-lg py-2 text-xs font-semibold transition-all cursor-pointer block text-center mt-2"
+              disabled={loading}
+              onClick={handleProfileDeletePress}
+              className="w-full bg-rose-700 hover:bg-rose-800 text-white rounded-lg py-2 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-rose-600 transition-all cursor-pointer flex items-center justify-center gap-1 mt-4"
             >
-              Cancel
+              Delete user
             </button>
           )}
         </form>
+          {showDeleteConfirm && (
+            <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white rounded-xl border border-slate-100 shadow-xl max-w-sm w-full p-5 space-y-4">
+                <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider text-rose-600 block text-serif">Delete Account?</h3>
+                <p className="text-[11px] text-stone-500 leading-normal">
+                  Are you sure you want to permanently delete your account? This will remove all your projects and data and cannot be undone.
+                </p>
+                <div className="flex justify-end gap-2 text-[11px] font-semibold pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="px-3.5 py-1.5 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-lg cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleProfileDelete}
+                    disabled={loading}
+                    className="px-4 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg cursor-pointer"
+                  >
+                    Confirm Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );

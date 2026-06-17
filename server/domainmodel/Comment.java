@@ -29,9 +29,6 @@ public class Comment {
     @Column(name = "user_name", nullable = false)
     private String userName;
 
-    @Column(name = "avatar_url", columnDefinition = "LONGTEXT")
-    private String avatarUrl;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String text;
 
@@ -59,9 +56,6 @@ public class Comment {
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
-
-    public String getAvatarUrl() { return avatarUrl; }
-    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 
     public String getText() { return text; }
     public void setText(String text) { this.text = text; }

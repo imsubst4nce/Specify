@@ -10,7 +10,7 @@ import DiagramGeneratorView from './components/DiagramGeneratorView.js';
 import { Project } from './types/index.js';
 
 export default function App() {
-  const [user, setUser] = useState<{ id: string; name: string; email: string; avatarUrl?: string } | null>(null);
+  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<'usecases' | 'crccards' | 'diagrams' | 'help'>('usecases');
@@ -80,7 +80,7 @@ export default function App() {
     return (
       <div className="min-h-screen dark bg-wood-955 text-stone-200 flex flex-col justify-center items-center font-sans">
         <div className="animate-spin h-6 w-6 border-2 border-ivy-600 border-t-transparent rounded-full mb-2 font-semibold"></div>
-        <p className="text-xs text-stone-400 font-semibold font-mono">Preparing Specify Planning Board...</p>
+        <p className="text-xs text-stone-400 font-semibold font-mono">Loading Specify...</p>
       </div>
     );
   }
@@ -114,7 +114,6 @@ export default function App() {
       <Navigation
         userName={user.name}
         userEmail={user.email}
-        avatarUrl={user.avatarUrl}
         onLogout={handleLogout}
         onEditProfile={() => setIsEditingProfile(true)}
         onHomeClick={() => {
@@ -141,7 +140,7 @@ export default function App() {
                 setUser(updatedUser);
                 setIsEditingProfile(false);
               }}
-              onProfileUpdateCancel={() => setIsEditingProfile(false)}
+              onProfileDelete={handleLogout}
             />
           </div>
         ) : !currentProject ? (
@@ -150,18 +149,9 @@ export default function App() {
               <div className="absolute top-0 right-0 h-40 w-40 bg-ivy-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
               
               <div className="flex items-center gap-4.5 z-10">
-                {user.avatarUrl ? (
-                  <img 
-                    src={user.avatarUrl} 
-                    alt={user.name} 
-                    referrerPolicy="no-referrer"
-                    className="h-16 w-16 rounded-full object-cover border-2 border-ivy-600 shadow-sm"
-                  />
-                ) : (
-                  <div className="h-16 w-16 rounded-full bg-ivy-600/10 border border-ivy-505/20 text-ivy-700 font-extrabold flex items-center justify-center text-3xl uppercase shadow-xs">
-                    {user.name ? user.name[0] : 'U'}
-                  </div>
-                )}
+                <div className="select-none h-16 w-16 rounded-full bg-ivy-600/10 border border-ivy-505/20 text-ivy-700 font-extrabold flex items-center justify-center text-3xl uppercase shadow-xs">
+                  {user.name ? user.name[0] : 'U'}
+                </div>
                 
                 <div>
                   <h2 className="text-2xl font-serif font-extrabold text-stone-900 tracking-tight flex items-center gap-1.5 dark:text-white">

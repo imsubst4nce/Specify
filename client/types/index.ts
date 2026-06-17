@@ -4,7 +4,6 @@ export interface User {
   email: string;
   password?: string;
   passwordHash?: string;
-  avatarUrl?: string;
 }
 export interface Project {
   id: string;
@@ -43,8 +42,6 @@ export interface Comment {
   targetId: string;
   userId: string;
   userName: string;
-  userAvatarUrl?: string;
-  avatarUrl?: string;
   text: string;
   createdAt: string;
 }

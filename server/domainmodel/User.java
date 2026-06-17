@@ -23,9 +23,6 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String password;
 
-    @Column(name = "avatar_url", columnDefinition = "LONGTEXT")
-    private String avatarUrl;
-
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -33,12 +30,11 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
-    public User(String id, String name, String email, String password, String avatarUrl) {
+    public User(String id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.avatarUrl = avatarUrl;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -53,9 +49,6 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-
-    public String getAvatarUrl() { return avatarUrl; }
-    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

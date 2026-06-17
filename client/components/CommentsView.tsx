@@ -145,15 +145,7 @@ export default function CommentsView({ projectId, targetType, targetId, targetTi
               <div className="flex justify-between items-center mb-1 text-slate-500">
                 <div className="flex items-center gap-1.5 font-semibold text-slate-800">
                   {(() => {
-                    const avatar = c.userAvatarUrl || c.avatarUrl;
-                    return avatar ? (
-                      <img
-                        src={avatar} 
-                        alt={c.userName} 
-                        referrerPolicy="no-referrer"
-                        className="h-5 w-5 rounded-full object-cover border border-ivy-200 shrink-0" 
-                      />
-                    ) : (
+                    return (
                       <div className="h-5 w-5 rounded-full bg-ivy-100 text-ivy-700 flex items-center justify-center text-[10px] font-bold uppercase shrink-0">
                         {c.userName ? c.userName[0] : <UserIcon className="h-2.5 w-2.5" />}
                       </div>

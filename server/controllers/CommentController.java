@@ -59,13 +59,6 @@ public class CommentController {
         }
 
         List<Comment> comments = commentRepository.findByTargetTypeAndTargetIdOrderByCreatedAtAsc(targetType.toLowerCase(), targetId);
-        
-        // Enrich list with current avatar URLs of authors to keep avatars updated
-        for (Comment c : comments) {
-            userRepository.findById(c.getUserId()).ifPresent(author -> {
-                c.setAvatarUrl(author.getAvatarUrl());
-            });
-        }
 
         return ResponseEntity.ok(comments);
     }
@@ -98,7 +91,6 @@ public class CommentController {
         commentPayload.setId(id);
         commentPayload.setUserId(user.getId());
         commentPayload.setUserName(user.getName());
-        commentPayload.setAvatarUrl(user.getAvatarUrl());
 
         Comment saved = commentRepository.save(commentPayload);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);

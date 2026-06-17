@@ -384,18 +384,9 @@ export default function ProjectManager({ onSelectProject }: ProjectManagerProps)
                                 className="w-full text-left px-2 py-1.5 hover:bg-stone-50 flex items-center justify-between transition-colors border-b border-stone-50 last:border-0 cursor-pointer text-[10px]"
                               >
                                 <div className="flex items-center gap-1.5 min-w-0">
-                                  {t.avatarUrl ? (
-                                    <img 
-                                      src={t.avatarUrl} 
-                                      alt={t.name}
-                                      referrerPolicy="no-referrer"
-                                      className="h-4 w-4 rounded-full object-cover border border-stone-200 shrink-0"
-                                    />
-                                  ) : (
-                                    <div className="h-4 w-4 rounded-full bg-ivy-100 text-ivy-700 flex items-center justify-center text-[8px] font-bold font-mono shrink-0">
-                                      {t.name[0]}
-                                    </div>
-                                  )}
+                                  <div className="h-4 w-4 rounded-full bg-ivy-100 text-ivy-700 flex items-center justify-center text-[8px] font-bold font-mono shrink-0">
+                                    {t.name[0]}
+                                  </div>
                                   <div className="flex flex-col min-w-0 leading-tight">
                                     <span className="font-semibold text-stone-700 truncate">{t.name}</span>
                                     <span className="text-[8px] text-stone-450 truncate">{t.email}</span>

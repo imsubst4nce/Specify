@@ -45,7 +45,7 @@ public class AuthController {
 
         String passwordHash = Base64.getEncoder().encodeToString(password.getBytes(StandardCharsets.UTF_8));
         String userId = UUID.randomUUID().toString().substring(0, 9);
-        User newUser = new User(userId, name, email, passwordHash, null);
+        User newUser = new User(userId, name, email, passwordHash);
 
         userRepository.save(newUser);
 
@@ -117,7 +117,6 @@ public class AuthController {
                 m.put("id", u.getId());
                 m.put("name", u.getName());
                 m.put("email", u.getEmail());
-                m.put("avatarUrl", u.getAvatarUrl());
                 result.add(m);
             }
         }
@@ -158,11 +157,9 @@ public class AuthController {
 
         String name = payload.get("name");
         String email = payload.get("email");
-        String avatarUrl = payload.get("avatarUrl");
         String password = payload.get("password");
 
         if (name != null) user.setName(name);
-        if (avatarUrl != null) user.setAvatarUrl(avatarUrl);
         if (email != null && !email.equalsIgnoreCase(user.getEmail())) {
             Optional<User> existingEmail = userRepository.findByEmail(email);
             if (existingEmail.isPresent()) {
@@ -181,6 +178,43 @@ public class AuthController {
         response.put("message", "Profile updated successfully");
         response.put("user", user);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/profile")
+    public ResponseEntity<Map<String, Object>> deleteProfile(
+            @RequestHeader("Authorization") String tokenHeader,
+            @RequestBody Map<String, String> payload) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
+            response.put("error", "Unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        String userId = tokenHeader.substring(7);
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            response.put("error", "User session invalid");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        User user = userOpt.get();
+        String currentPassword = payload.get("currentPassword");
+        if (currentPassword == null) {
+            response.put("error", "Current password is required to delete profile");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        String currentHash = Base64.getEncoder().encodeToString(currentPassword.getBytes(StandardCharsets.UTF_8));
+        if (!user.getPassword().equals(currentHash)) {
+            response.put("error", "Incorrect current password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        userRepository.delete(user);
+        response.put("message", "Profile deleted successfully");
         return ResponseEntity.ok(response);
     }
 }

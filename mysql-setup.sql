@@ -12,7 +12,7 @@ USE specify_db;
 -- CLEAR EXISTING TABLES
 -- =====================
 
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 0; -- DISABLE FOREIGN KEY CHECKS
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS crc_card_responsibilities;
 DROP TABLE IF EXISTS crc_card_collaborators;
@@ -24,7 +24,8 @@ DROP TABLE IF EXISTS use_cases;
 DROP TABLE IF EXISTS project_collaborators;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
-SET FOREIGN_KEY_CHECKS = 1;
+
+SET FOREIGN_KEY_CHECKS = 1; -- REENABLE FOREIGN_KEY_CHECKS
 
 -- ===========================
 -- TABLE STRUCTURE DEFINITIONS
@@ -36,7 +37,6 @@ CREATE TABLE users (
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
-  avatar_url LONGTEXT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -151,7 +151,6 @@ CREATE TABLE comments (
   target_id VARCHAR(36) NOT NULL,    -- References use_cases.id or crc_cards.id
   user_id VARCHAR(36) NOT NULL,
   user_name VARCHAR(255) NOT NULL,
-  avatar_url LONGTEXT NULL,
   text TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
