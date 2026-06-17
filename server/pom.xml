@@ -56,10 +56,10 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>server</sourceDirectory>
+        <sourceDirectory>.</sourceDirectory>
         <resources>
             <resource>
-                <directory>server</directory>
+                <directory>.</directory>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
