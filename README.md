@@ -7,20 +7,20 @@ Before setting up the application, make sure you have the following installed on
 
 1. **Node.js** (version 18.x or higher)
 2. **npm** (version 9.x or higher)
-3. **MySQL Server** (version 8.0 or higher) - Optional, as the app will fallback to a local JSON file if MySQL is not configured.
+3. **MySQL Server** (version 8.0 or higher)
 
 ## Local Setup
 
 Follow these steps to configure and run the application on your computer:
 
 ### Step 1: Install Dependencies
-Open your command line interface in the project root directory and run:
+Open your command line interface in the `client` directory and run:
 ```bash
 npm install
 ```
 
 ### Step 2: Configure Environment Variables
-Create a `.env` file in the root directory and configure your port and MySQL login details. You can copy the template file to start:
+Create a `.env` file in the `client` directory and configure your port and MySQL login details. You can copy the template file to start:
 ```bash
 cp .env.example .env
 ```
@@ -38,45 +38,32 @@ DB_PORT=3306
 ```
 
 ### Step 3: Database Setup (Optional)
-If you are planning to use a MySQL database, import the setup file to create the tables:
+If you are planning to use the default MySQL database schema, import the setup file to create the tables:
 ```bash
-mysql -u root -p < mysql-setup.sql
+mysql -u root -p < mysql-schema.sql
 ```
-*Note: If no MySQL database details are provided or the database is unreachable, the app automatically falls back to a clean local JSON file (`database.json`) to keep all screens and features fully operational.*
 
 ## Running the Application
 
-### Real-Time Live Preview (Express & React)
-For local development and testing inside the live preview container, the app uses a dual-engine architecture where Vite serves React assets and Express handles endpoints on port 3000:
-
-1. Start development mode with hot-reloading:
+### Frontend
+1. Enter the `client` directory.
+2. Start development mode with hot-reloading:
    ```bash
    npm run dev
    ```
-2. Open [http://localhost:3000](http://localhost:3000) in your web browser.
+3. Open [http://localhost:3000](http://localhost:3000) in your web browser.
 
-### Java Spring Boot Backend Server
-The entire controller, routing, and database persistency layer has been migrated to Java Spring Boot under the `server` directory, mapped and configured via the root-level `pom.xml`:
+### Backend
+The entire controller, routing, and database persistency layer has been implemented using Java Spring Boot under the `server` directory, mapped and configured via the `pom.xml`:
 
 1. **Prerequisites:** Ensure you have **Java JDK 17** (or higher) and **Maven** installed.
-2. **Build the JAR Package:**
+2. Enter the `server` directory.
+3. **Build the JAR Package:**
    ```bash
    mvn clean package
    ```
-3. **Execute the Spring Boot Application:**
+4. **Execute the Spring Boot Application:**
    ```bash
    mvn spring-boot:run
    ```
-This boots the Spring server, establishing DB tables, REST endpoints, security filters, and UML compilation services directly on the configured Spring port.
-
-### Production Production Build
-To wrap up and compile the Express wrapper and client assets:
-
-1. Compile the code:
-   ```bash
-   npm run build
-   ```
-2. Start the compiled app:
-   ```bash
-   npm start
-   ```
+   Configured `port` for Spring Boot server is set to `8080`.
