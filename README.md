@@ -13,13 +13,13 @@ Before setting up the application, make sure you have the following installed on
 
 Follow these steps to configure and run the application on your computer:
 
-### Step 1: Install Dependencies
+### Step 1: Install Frontend Dependencies
 Open your command line interface in the `client` directory and run:
 ```bash
 npm install
 ```
 
-### Step 2: Configure Environment Variables
+### Step 2: Configure Backend Environment Variables
 Create a `.env` file in the `server/config` directory and configure your server port and MySQL details. You can copy the template file to start:
 ```bash
 cp .env.example .env
