@@ -20,21 +20,19 @@ npm install
 ```
 
 ### Step 2: Configure Environment Variables
-Create a `.env` file in the `client` directory and configure your port and MySQL login details. You can copy the template file to start:
+Create a `.env` file in the `server/config` directory and configure your server port and MySQL details. You can copy the template file to start:
 ```bash
 cp .env.example .env
 ```
 
 Modify the `.env` file with your own values:
 ```env
-APP_URL="http://localhost:3000"
-
-# MySQL Database connection details
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_mysql_password
 DB_NAME=specify_db
 DB_PORT=3306
+SERVER_PORT=8080
 ```
 
 ### Step 3: Database Setup (Optional)
