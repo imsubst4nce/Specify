@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import server.database.UserRepository;
 import server.domainmodel.User;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +19,9 @@ import java.util.ArrayList;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -43,7 +45,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        String passwordHash = Base64.getEncoder().encodeToString(password.getBytes(StandardCharsets.UTF_8));
+        String passwordHash = passwordEncoder.encode(password);
         String userId = UUID.randomUUID().toString().substring(0, 9);
         User newUser = new User(userId, name, email, passwordHash);
 
@@ -75,8 +77,7 @@ public class AuthController {
         }
 
         User user = userOpt.get();
-        String incomingHash = Base64.getEncoder().encodeToString(password.getBytes(StandardCharsets.UTF_8));
-        if (!user.getPassword().equals(incomingHash)) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             response.put("error", "Invalid email or password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
@@ -149,8 +150,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        String currentHash = Base64.getEncoder().encodeToString(currentPassword.getBytes(StandardCharsets.UTF_8));
-        if (!user.getPassword().equals(currentHash)) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             response.put("error", "Incorrect current password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
@@ -169,7 +169,7 @@ public class AuthController {
             user.setEmail(email);
         }
         if (password != null && !password.trim().isEmpty()) {
-            String newHash = Base64.getEncoder().encodeToString(password.getBytes(StandardCharsets.UTF_8));
+            String newHash = passwordEncoder.encode(password);
             user.setPassword(newHash);
         }
 
@@ -207,8 +207,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        String currentHash = Base64.getEncoder().encodeToString(currentPassword.getBytes(StandardCharsets.UTF_8));
-        if (!user.getPassword().equals(currentHash)) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             response.put("error", "Incorrect current password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
